@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>政治速查 · 思想道德与法治</title>
+<style>
+:root {
+  --bg-color: #F2EFE9;
+  --primary-color: #1B4D3E;
+  --accent-color: #D9381E;
+  --text-color: #2C2C2C;
+  --text-secondary: #5A5A5A;
+  --card-bg: #FAF9F6;
+  --card-border: #E3DFD5;
+  --mask-color: #D6D2C9;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  font-size: 14px;
+  padding: 0 10px 40px 10px;
+}
+header {
+  text-align: center;
+  padding: 24px 0 16px 0;
+  border-bottom: 2px solid var(--primary-color);
+  margin-bottom: 16px;
+}
+header h1 {
+  font-size: 22px;
+  color: var(--primary-color);
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+header p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.toolbar {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-color);
+  padding: 10px 0;
+  z-index: 100;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: 16px;
+}
+.search-box {
+  flex: 1;
+  min-width: 180px;
+}
+.search-box input {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  background-color: #FFF;
+  color: var(--text-color);
+}
+.tools-right {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: var(--primary-color);
+  color: #FFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+button:hover {
+  opacity: 0.9;
+}
+button.active {
+  background-color: var(--accent-color);
+}
+.nav-links {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 4px;
+  width: 100%;
+  font-size: 13px;
+}
+.nav-links::-webkit-scrollbar {
+  height: 4px;
+}
+.nav-links::-webkit-scrollbar-thumb {
+  background-color: var(--card-border);
+  border-radius: 2px;
+}
+.nav-links a {
+  color: var(--primary-color);
+  text-decoration: none;
+  padding: 2px 8px;
+  background-color: var(--card-border);
+  border-radius: 3px;
+}
+.nav-links a:hover {
+  background-color: var(--primary-color);
+  color: #FFF;
+}
+section {
+  margin-bottom: 24px;
+}
+h3 {
+  font-size: 16px;
+  color: var(--primary-color);
+  border-left: 4px solid var(--primary-color);
+  padding-left: 8px;
+  margin-bottom: 12px;
+  margin-top: 20px;
+}
+.table-card, .item {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  transition: all 0.2s;
+}
+.table-card h4, .item h4 {
+  font-size: 15px;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.table-content {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.table-content p {
+  margin-bottom: 6px;
+}
+.table-content p:last-child {
+  margin-bottom: 0;
+}
+.item h4 span.tag {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--text-secondary);
+}
+.ans {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-color);
+  margin-bottom: 6px;
+}
+.tip {
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-top: 1px dashed var(--card-border);
+  padding-top: 6px;
+  margin-top: 6px;
+}
+.tip::before {
+  content: "易错点：";
+  color: var(--accent-color);
+  font-weight: bold;
+}
+strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+.hl {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+/* 自测模式样式 */
+body.test-mode .ans,
+body.test-mode .tip,
+body.test-mode .table-content {
+  filter: blur(5px);
+  user-select: none;
+  cursor: pointer;
+  background-color: var(--mask-color);
+  border-radius: 4px;
+  transition: filter 0.2s;
+}
+body.test-mode .item.revealed .ans,
+body.test-mode .item.revealed .tip,
+body.test-mode .table-card.revealed .table-content {
+  filter: none;
+  user-select: text;
+  background-color: transparent;
+}
+body.test-mode .item, 
+body.test-mode .table-card {
+  cursor: pointer;
+}
+.hidden-item {
+  display: none !important;
+}
+@media (min-width: 768px) {
+  body {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 15px;
+  }
+  header h1 {
+    font-size: 26px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>政治速查 · 思想道德与法治</h1>
+  <p>核心教材知识点随身速查墙（无时政纯表述版）</p>
+</header>
+
+<div class="toolbar">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="搜索关键词（如：人生价值、爱国主义）...">
+  </div>
+  <div class="tools-right">
+    <button id="toggleTestBtn" onclick="toggleTestMode()">遮挡自测：关</button>
+    <button onclick="expandAll()">全展开</button>
+  </div>
+  <div class="nav-links">
+    <a href="#sec-overview">核心总表</a>
+    <a href="#sec-view">人生观</a>
+    <a href="#sec-ideal">理想信念</a>
+    <a href="#sec-spirit">中国精神</a>
+    <a href="#sec-moral">道德总论</a>
+    <a href="#sec-rule">法治总论</a>
+    <a href="#sec-law">宪法与权利</a>
+    <a href="#sec-run">法律运行</a>
+    <a href="#sec-youth">新时代青年</a>
+  </div>
+</div>
+
+<!-- 核心价值观与道德规范总表 -->
+<section id="sec-overview">
+  <h3>核心价值观与道德规范总表</h3>
+  <div class="table-card" onclick="toggleReveal(this)">
+    <h4>社会主义核心价值观与公民道德规范速记</h4>
+    <div class="table-content">
+      <p><strong>社会主义核心价值观（24 字）</strong>：国家层面——富强、民主、文明、和谐；社会层面——自由、平等、公正、法治；个人层面——爱国、敬业、诚信、友善。</p>
+      <p><strong>社会主义道德建设</strong>：以<span class="hl">为人民服务为核心</span>，以<span class="hl">集体主义为原则</span>。</p>
+      <p><strong>公民基本道德规范</strong>：爱国守法、明礼诚信、团结友善、勤俭自强、敬业奉献。</p>
+      <p><strong>社会公德</strong>：文明礼貌、助人为乐、爱护公物、保护环境、遵纪守法。</p>
+      <p><strong>职业道德</strong>：爱岗敬业、诚实守信、办事公道、热情服务、奉献社会。</p>
+      <p><strong>家庭美德</strong>：尊老爱幼、男女平等、夫妻和睦、勤俭持家、邻里互助。</p>
+      <p><strong>个人品德</strong>：爱国奉献、明礼遵规、勤劳善良、宽厚正直、自强自律。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 第一部分：人生观 -->
+<section id="sec-view">
+  <h3>第一部分 · 人生观</h3>
+  
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>人生观的构成与核心 <span class="tag">考点</span></h4>
+    <div class="ans">人生观由<strong>人生目的、人生态度和人生价值</strong>三方面构成，其中<span class="hl">人生目的是人生观的核心</span>（决定人生态度与人生价值）。</div>
+    <div class="tip">易混淆人生目的、人生态度和人生价值的地位，务必记住“目的”是核心。</div>
+  </article>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>人生价值的内涵与衡量标准 <span class="tag">重点</span></h4>
+    <div class="ans">人生价值内在地包含了人生的自我价值和社会价值，<span class="hl">人的社会价值是实现自我价值的基础</span>；衡量人生价值的标准最根本的是看一个人的实践活动<strong>是否符合社会发展的客观规律、是否促进了历史的进步</strong>。</div>
+    <div class="tip">切勿把经济收入或个人满足感当作衡量人生价值的最根本标准。</div>
+  </article>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>人生价值的实现条件与错误倾向 <span class="tag">常考</span></h4>
+    <div class="ans">实现人生价值要与<strong>历史同向、与祖国同行、与人民同在</strong>，反对拜金主义、享乐主义和极端个人主义。</div>
+    <div class="tip">实践是实现人生价值的根本途径，离开社会实践空谈人生价值是行不通的。</div>
+  </article>
+</section>
+
+<!-- 第二部分：理想信念 -->
+<section id="sec-ideal">
+  <h3>第二部分 · 理想信念</h3>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>理想与信念的定义及特征 <span class="tag">概念</span></h4>
+    <div class="ans"><strong>理想</strong>是人们在实践中形成的、有实现可能性的、对未来社会和自身发展目标的向往和追求，具有<strong>超越性、实践性、时代性</strong>；<strong>信念</strong>是人们在一定的认识基础上确立的对某种思想或事物坚信不疑并身体力行的精神态度，具有<strong>执着性和多样性</strong>。</div>
+    <div class="tip">理想强调“向往和追求”，信念强调“坚信不疑并身体力行”。</div>
+  </article>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>理想与信念的关系及共同理想与中国梦 <span class="tag">综合</span></h4>
+    <div class="ans"><span class="hl">理想指引方向、信念决定成败</span>。理想与现实是辩证统一的：理想来源于现实、高于现实，现实孕育理想、理想转化为现实，艰苦奋斗是理想与现实之间的桥梁、是实现理想的重要条件。社会理想规定、指引着个人理想，个人理想的实现要以社会理想的实现为前提；中国特色社会主义共同理想是把我国建设成为富强民主文明和谐美丽的社会主义现代化强国；<span class="hl">中国梦的本质是国家富强、民族振兴、人民幸福</span>。</div>
+    <div class="tip">中国梦的基本内涵是国家富强、民族振兴、人民幸福，切勿漏掉任一维度。</div>
+  </article>
+</section>
+
+<!-- 第三部分：中国精神 -->
+<section id="sec-spirit">
+  <h3>第三部分 · 中国精神</h3>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>中国精神的内容与结构 <span class="tag">框架</span></h4>
+    <div class="ans"><strong>伟大创造精神、伟大奋斗精神、伟大团结精神、伟大梦想精神</strong>共同构成中国精神的主要内容；以<span class="hl">爱国主义为核心的民族精神</span>（基本内容：团结统一、爱好和平、勤劳勇敢、自强不息）和以<span class="hl">改革创新为核心的时代精神</span>，是中国精神的基本内容。</div>
+    <div class="tip">区分民族精神的核心（爱国主义）与时代精神的核心（改革创新），切勿张冠李戴。</div>
+  </article>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>爱国主义的内涵与新时代要求 <span class="tag">重点</span></h4>
+    <div class="ans">爱国主义的基本内涵是<strong>爱祖国的大好河山、爱自己的骨肉同胞、爱祖国的灿烂文化、爱自己的国家</strong>。爱国主义是调节个人与祖国之间关系的道德要求、政治原则和法律规范。做忠诚的爱国者要坚持爱国主义与社会主义相统一、维护祖国统一和民族团结、尊重和传承中华民族历史文化、坚持立足民族走向世界。</div>
+    <div class="tip">爱国主义不仅是道德要求，同时也是政治原则和法律规范。</div>
+  </article>
+</section>
+
+<!-- 第四部分：道德总论 -->
+<section id="sec-moral">
+  <h3>第四部分 · 道德总论</h3>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>道德的起源、本质与功能 <span class="tag">基本原理</span></h4>
+    <div class="ans">道德是人类社会特有的现象，是<strong>由经济基础决定的社会意识形态</strong>，依靠社会舆论、传统习惯和人们的内心信念来维持；道德的功能主要有<strong>认识功能、规范功能和调节功能</strong>。</div>
+    <div class="tip">决定道德的最终根源是物质资料的生产方式即经济基础，而非政治或法律。</div>
+  </article>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>中华传统美德与中国革命道德 <span class="tag">传统</span></h4>
+    <div class="ans">中华传统美德的基本精神包括重视国家利益和民族大义、推崇仁爱原则、重视人伦关系、追求精神境界（向往理想人格）、重视道德践履（强调道德修养、知行合一）；<span class="hl">中国革命道德的形成始于中国共产党成立</span>。</div>
+    <div class="tip">中国革命道德萌芽或形成于中国共产党的成立，注意起点标志。</div>
+  </article>
+</section>
+
+<!-- 第五部分：法治总论 -->
+<section id="sec-rule">
+  <h3>第五部分 · 法治总论</h3>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>全面依法治国的总目标与习近平法治思想 <span class="tag">核心考点</span></h4>
+    <div class="ans">全面依法治国的总目标是<strong>建设中国特色社会主义法治体系、建设社会主义法治国家</strong>。习近平法治思想的核心要义是「十一个坚持」：坚持党对全面依法治国的领导、坚持以人民为中心、坚持中国特色社会主义法治道路、坚持依宪治国、依宪执政、坚持在法治轨道上推进国家治理体系和治理能力现代化、坚持建设中国特色社会主义法治体系、坚持依法治国、依法执政、依法行政共同推进，法治国家、法治政府、法治社会一体建设、坚持全面推进科学立法、严格执法、公正司法、全民守法、坚持统筹推进国内法治和涉外法治、坚持建设德才兼备的高素质法治工作队伍、坚持抓住领导干部这个「关键少数」。</div>
+    <div class="tip">十一个坚持中首要的是“坚持党对全面依法治国的领导”，必须将党的领导贯穿法治全过程。</div>
+  </article>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>法治思维的基本内容 <span class="tag">思维</span></h4>
+    <div class="ans">法治思维的基本内容包括<strong>法律至上、权力制约、公平正义、权利保障、正当程序</strong>。</div>
+    <div class="tip">注意区分法治思维与人治思维，法治思维的核心在于“以权受制约、法律至上”为前提。</div>
+  </article>
+</section>
+
+<!-- 第六部分：宪法与权利义务 -->
+<section id="sec-law">
+  <h3>第六部分 · 宪法与权利义务</h3>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>宪法的地位与国家性质 <span class="tag">根本法</span></h4>
+    <div class="ans">宪法是国家的根本法、治国安邦的总章程，具有<strong>最高的法律地位、法律权威和法律效力</strong>；我国是工人阶级领导的、以工农联盟为基础的<span class="hl">人民民主专政的社会主义国家</span>。</div>
+    <div class="tip">宪法是一切组织和个人的根本活动准则，任何法律、法规都不得与宪法相抵触。</div>
+  </article>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>公民的基本权利、义务与统一性关系 <span class="tag">权利</span></h4>
+    <div class="ans">公民的基本权利包括平等权、政治权利和自由、宗教信仰自由、人身自由权利、社会经济权利、文化教育权利和监督权等；基本义务包括维护国家统一和全国各民族团结、遵守宪法和法律、维护祖国的安全、荣誉和利益、保卫祖国、依法服兵役和参加民兵组织、依法纳税等。<span class="hl">公民的权利与义务是统一的</span>，既要依法行使权利、也要依法履行义务。</div>
+    <div class="tip">切勿认为享有权利可以不履行义务，两者具有不可分割的对等与统一性。</div>
+  </article>
+</section>
+
+<!-- 第七部分：法律的运行 -->
+<section id="sec-run">
+  <h3>第七部分 · 法律的运行</h3>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>法律运行的四个环节与法治建设三项推进 <span class="tag">运行</span></h4>
+    <div class="ans">法律的运行主要包括<strong>法律制定（立法）、法律执行（执法）、法律适用（司法）、法律遵守（守法）</strong>四个环节。<span class="hl">法律权威源自人民的内心拥护和真诚信仰</span>，尊重和维护法律权威要做到信仰法律、遵守法律、服从法律、维护法律。全面依法治国要坚持依法治国、依法执政、依法行政共同推进，法治国家、法治政府、法治社会一体建设。</div>
+    <div class="tip">注意“执法”和“司法”的主体差异，司法特指国家司法机关及其工作人员依照法定职权和程序应用法律的活动。</div>
+  </article>
+</section>
+
+<!-- 第八部分：新时代青年 -->
+<section id="sec-youth">
+  <h3>第八部分 · 新时代青年</h3>
+
+  <article class="item" onclick="toggleReveal(this)">
+    <h4>新时代好青年的标准与实践要求 <span class="tag">压轴</span></h4>
+    <div class="ans">新时代好青年的标准是<span class="hl">有理想、敢担当、能吃苦、肯奋斗</span>。青年要把个人的理想追求融入党和国家事业之中，在实现中国梦的生动实践中放飞青春梦想。</div>
+    <div class="tip">背诵标准时四个词缺一不可：“有理想、敢担当、能吃苦、肯奋斗”。</div>
+  </article>
+</section>
+
+<script>
+let isTestMode = false;
+
+function toggleTestMode() {
+  isTestMode = !isTestMode;
+  const body = document.body;
+  const btn = document.getElementById('toggleTestBtn');
+  if (isTestMode) {
+    body.classList.add('test-mode');
+    btn.classList.add('active');
+    btn.textContent = '遮挡自测：开';
+  } else {
+    body.classList.remove('test-mode');
+    btn.classList.remove('active');
+    btn.textContent = '遮挡自测：关';
+    // 退出时移除所有已展开状态
+    document.querySelectorAll('.revealed').forEach(el => el.classList.remove('revealed'));
+  }
+}
+
+function toggleReveal(element) {
+  if (isTestMode) {
+    element.classList.toggle('revealed');
+  }
+}
+
+function expandAll() {
+  if (isTestMode) {
+    document.querySelectorAll('.item, .table-card').forEach(el => el.classList.add('revealed'));
+  }
+}
+
+// 实时搜索过滤
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', function() {
+  const keyword = this.value.trim().toLowerCase();
+  const items = document.querySelectorAll('.item, .table-card');
+  
+  items.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    if (text.includes(keyword)) {
+      item.classList.remove('hidden-item');
+    } else {
+      item.classList.add('hidden-item');
+    }
+  });
+});
+</script>
+
+<style id="quizfix-style">
+/* QUIZFIX: 遮挡自测 v2 —— 只遮答案段，题干/框架保持可见（覆盖各页旧的全遮规则）
+   兼容两种模式类名： quiz-mode / test-mode ；展开类名： revealed / expanded */
+body.quiz-mode .item .ans, body.quiz-mode .item .tip,
+body.quiz-mode .item:not(.revealed) .ans, body.quiz-mode .item:not(.revealed) .tip,
+body.quiz-mode .item .ans *, body.quiz-mode .item .tip *,
+body.test-mode .item .ans, body.test-mode .item .tip,
+body.test-mode .item:not(.revealed) .ans, body.test-mode .item:not(.revealed) .tip,
+body.test-mode .item:not(.expanded) .ans, body.test-mode .item:not(.expanded) .tip,
+body.test-mode .item .ans *, body.test-mode .item .tip * {
+  color: inherit !important;
+  background-color: transparent !important;
+  filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: none !important;
+}
+body.quiz-mode .item:not(.revealed) .msk,
+body.test-mode .item:not(.revealed):not(.expanded) .msk {
+  color: transparent !important;
+  background-color: #DCD4BF !important;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #C7BC9E;
+  filter: none !important;
+  user-select: none;
+}
+body.quiz-mode .item:not(.revealed) .msk *,
+body.test-mode .item:not(.revealed):not(.expanded) .msk * {
+  color: transparent !important;
+  background-color: transparent !important;
+}
+</style>
+<script>
+/* QUIZFIX-JS: 把答案段标成 .msk —— ①已有高亮标记（k/hl/num/key/err/mono/quiz-cell）
+   ②公式行按分隔符切分，遮 =、~、⇒、⇔ 之后的结果段 ③对比表遮首列以外的数据格 */
+(function () {
+  function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  ready(function () {
+    var HL = ['k', 'hl', 'num', 'key', 'err', 'mono', 'quiz-cell', 'formula', 'red', 'code', 'code-inline', 'highlight-red', 'key-red'];
+    document.querySelectorAll('.item').forEach(function (item) {
+      var sel = HL.map(function (c) { return '.ans .' + c + ', .tip .' + c; }).join(', ');
+      item.querySelectorAll(sel).forEach(function (sp) { sp.classList.add('msk'); });
+      var ans = item.querySelector('.ans');
+      if (ans) {
+        var walker = document.createTreeWalker(ans, NodeFilter.SHOW_TEXT, {
+          acceptNode: function (node) {
+            if (!node.nodeValue || !/[~=]|⇒|⇔/.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+            var p = node.parentElement;
+            if (!p || p.closest('.msk') || p.closest('sup') || p.closest('sub')) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function (node) {
+          var frag = document.createDocumentFragment();
+          node.nodeValue.split(/(；|;)/).forEach(function (seg, idx) {
+            if (idx % 2 === 1) { frag.appendChild(document.createTextNode(seg)); return; }
+            var m = seg.match(/^([\s\S]*?[~=⇒⇔]\s*)([\s\S]+)$/);
+            if (m && m[2].replace(/[\s。．.]+$/, '').length > 0) {
+              frag.appendChild(document.createTextNode(m[1]));
+              var s = document.createElement('span');
+              s.className = 'msk';
+              s.textContent = m[2];
+              frag.appendChild(s);
+            } else {
+              frag.appendChild(document.createTextNode(seg));
+            }
+          });
+          node.parentNode.replaceChild(frag, node);
+        });
+      }
+      item.querySelectorAll('table').forEach(function (tb) {
+        tb.querySelectorAll('tr').forEach(function (tr) {
+          tr.querySelectorAll('td').forEach(function (td, ci) {
+            if (ci === 0 || td.querySelector('.msk')) return;
+            var s = document.createElement('span');
+            s.className = 'msk';
+            while (td.firstChild) s.appendChild(td.firstChild);
+            td.appendChild(s);
+          });
+        });
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

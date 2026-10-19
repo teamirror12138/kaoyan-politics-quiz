@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>政治速查 · 马克思主义基本原理</title>
+    <style>
+        :root {
+            --bg-color: #F2EFE9;
+            --main-color: #1B4D3E;
+            --accent-color: #D9381E;
+            --text-color: #2C2C2C;
+            --text-muted: #555555;
+            --card-bg: #FAF9F6;
+            --border-color: #D8D4CD;
+            --blur-val: 6px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            font-size: 14px;
+            padding: 16px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--main-color);
+        }
+
+        header h1 {
+            color: var(--main-color);
+            font-size: 22px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-color);
+            padding: 10px 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toolbar input[type="search"] {
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: #fff;
+            color: var(--text-color);
+            width: 200px;
+            outline: none;
+        }
+
+        .toolbar input[type="search"]:focus {
+            border-color: var(--main-color);
+        }
+
+        .toolbar button {
+            padding: 6px 14px;
+            font-size: 14px;
+            background-color: var(--main-color);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toolbar button:hover {
+            background-color: #14372c;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            color: var(--main-color);
+            text-decoration: none;
+            padding: 2px 8px;
+            border: 1px solid var(--main-color);
+            border-radius: 3px;
+            background: rgba(27, 77, 62, 0.05);
+        }
+
+        .nav-links a:hover {
+            background: var(--main-color);
+            color: #fff;
+        }
+
+        section {
+            margin-bottom: 24px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        section h3 {
+            color: var(--main-color);
+            font-size: 18px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--main-color);
+            padding-left: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: rgba(27, 77, 62, 0.1);
+            color: var(--main-color);
+        }
+
+        .item {
+            margin-bottom: 12px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .item:hover {
+            border-color: var(--main-color);
+        }
+
+        .item h4 {
+            font-size: 15px;
+            color: var(--main-color);
+            margin-bottom: 6px;
+        }
+
+        .ans, .tip {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .ans {
+            margin-bottom: 4px;
+        }
+
+        .tip {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        .highlight-red {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .highlight-bold {
+            font-weight: bold;
+        }
+
+        /* 自测模式样式 */
+        body.test-mode .ans,
+        body.test-mode .tip {
+            filter: blur(var(--blur-val));
+            user-select: none;
+            background: rgba(0,0,0,0.03);
+            transition: filter 0.2s;
+        }
+
+        body.test-mode .item.expanded .ans,
+        body.test-mode .item.expanded .tip {
+            filter: none;
+            user-select: auto;
+            background: transparent;
+        }
+
+        body.test-mode .item:not(.expanded) {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>政治速查 · 马克思主义基本原理复习墙</h1>
+    </header>
+
+    <div class="toolbar">
+        <input type="search" id="searchInput" placeholder="输入关键词实时过滤...">
+        <button id="toggleTestBtn">开启自测模式</button>
+        <div class="nav-links">
+            <a href="#tables">总表区域</a>
+            <a href="#philosophy">哲学基本问题与物质观</a>
+            <a href="#practice-cognition">实践与认识论</a>
+            <a href="#dialectics">唯物辩证法</a>
+            <a href="#historical-materialism">唯物史观</a>
+            <a href="#political-economy">政治经济学</a>
+            <a href="#capitalism">资本主义发展与趋势</a>
+        </div>
+    </div>
+
+    <section id="tables">
+        <h3>一、核心总表</h3>
+        
+        <h4 style="margin-top:10px; margin-bottom:6px; color:var(--main-color);">三大规律对比表</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">规律名称</th>
+                    <th style="width: 35%;">实质与地位</th>
+                    <th style="width: 40%;">核心要点与方法论</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>对立统一规律</strong></td>
+                    <td>矛盾是事物发展的源泉和动力，揭示事物发展的动力和源泉，是唯物辩证法的<span class="highlight-red">实质和核心</span></td>
+                    <td>矛盾即对立统一；矛盾普遍性与特殊性辩证关系的原理是矛盾问题的精髓；具体问题具体分析是马克思主义活的灵魂。</td>
+                </tr>
+                <tr>
+                    <td><strong>量变质变规律</strong></td>
+                    <td>揭示事物发展的<span class="highlight-red">形式和状态</span></td>
+                    <td>量变是质变的必要准备，质变是量变的必然结果，量变和质变相互渗透；方法论：重视量的积累、抓住时机促成质变、坚持适度原则。</td>
+                </tr>
+                <tr>
+                    <td><strong>否定之否定规律</strong></td>
+                    <td>揭示事物发展的<span class="highlight-red">方向和道路</span>（前进性与曲折性统一）</td>
+                    <td>辩证否定是事物的自我否定，其实质是扬弃；事物的发展是波浪式前进、螺旋式上升，前途是光明的、道路是曲折的。</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 style="margin-top:15px; margin-bottom:6px; color:var(--main-color);">帽子题引文归类表</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 50%;">经典引文</th>
+                    <th style="width: 50%;">对应原理 / 哲派归类</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>「存在就是被感知」</td>
+                    <td>主观唯心主义</td>
+                </tr>
+                <tr>
+                    <td>「理在事先，未有天地万物，已有理在」</td>
+                    <td>客观唯心主义</td>
+                </tr>
+                <tr>
+                    <td>「祸兮福之所倚，福兮祸之所伏」</td>
+                    <td>矛盾双方在一定条件下相互转化</td>
+                </tr>
+                <tr>
+                    <td>「一把钥匙开一把锁」</td>
+                    <td>矛盾的特殊性、具体问题具体分析</td>
+                </tr>
+                <tr>
+                    <td>「千里之行，始于足下」</td>
+                    <td>量变是质变的必要准备、重视量的积累</td>
+                </tr>
+                <tr>
+                    <td>「橘生淮南则为橘，生于淮北则为枳」</td>
+                    <td>外因是事物变化的条件、具体条件决定事物发展</td>
+                </tr>
+                <tr>
+                    <td>「纸上得来终觉浅，绝知此事要躬行」</td>
+                    <td>实践是认识的来源、认识要回到实践</td>
+                </tr>
+                <tr>
+                    <td>「没有调查，就没有发言权」</td>
+                    <td>一切从实际出发、调查研究（《反对本本主义》）</td>
+                </tr>
+                <tr>
+                    <td>「城门失火，殃及池鱼」</td>
+                    <td>联系的普遍性与客观性</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="philosophy">
+        <h3>二、哲学基本问题与物质意识观</h3>
+        
+        <article class="item">
+            <h4>哲学基本问题</h4>
+            <div class="ans">思维和存在（意识和物质）的关系问题，包括两方面：何者为第一性（划分<span class="highlight-red">唯物主义与唯心主义的唯一标准</span>）、有无同一性即思维能否认识存在（划分可知论与不可知论）；唯心主义两种基本形态：主观唯心主义（人的感觉、观念）、客观唯心主义（理念、绝对精神、天、理）；唯物主义三种历史形态：古代朴素唯物主义、近代形而上学唯物主义（<span class="highlight-red">机械性、形而上学性、不彻底性</span>）、辩证唯物主义和历史唯物主义。</div>
+            <div class="tip">易错点：注意近代形而上学唯物主义的三个缺陷缺一不可；明确划分唯物唯心标准的唯一性。</div>
+        </article>
+
+        <article class="item">
+            <h4>物质观</h4>
+            <div class="ans">列宁定义：物质是标志客观实在的哲学范畴，这种客观实在是人通过感觉感知的，它不依赖于我们的感觉而存在，为我们的感觉所复写、摄影、反映；物质的<span class="highlight-red">唯一特性是客观实在性</span>；运动是物质的存在方式和根本属性，静止是运动的特殊状态；时间和空间是运动着的物质的基本存在形式。</div>
+            <div class="tip">易错点：客观实在性是唯一特性，不能混淆为客观存在性或其他属性。</div>
+        </article>
+
+        <article class="item">
+            <h4>意识</h4>
+            <div class="ans">意识是人脑的机能和属性，是客观世界的主观映象；意识能动性（能动作用）表现在四方面：具有目的性和计划性、具有创造性、能指导实践改造客观世界、能调控人的行为和生理活动；发挥主观能动性的前提是<span class="highlight-red">尊重客观规律</span>，基础是<span class="highlight-red">社会实践</span>；意识的能动作用再大也不能脱离物质条件。</div>
+            <div class="tip">易错点：意识能动作用发挥的前提与基础极易颠倒。</div>
+        </article>
+    </section>
+
+    <section id="practice-cognition">
+        <h3>三、实践与认识论</h3>
+
+        <article class="item">
+            <h4>实践</h4>
+            <div class="ans">实践是人类能动地改造世界的社会性的物质活动，具有<span class="highlight-red">客观现实性、自觉能动性、社会历史性</span>三个特征；基本形式：物质生产实践（最基本）、社会政治实践、科学文化实践；实践决定认识四点：实践是认识的来源、认识发展的动力、认识的目的、检验认识真理性的唯一标准。</div>
+            <div class="tip">易错点：物质生产实践是人类最基本的实践形式，区分三大特征。</div>
+        </article>
+
+        <article class="item">
+            <h4>认识运动</h4>
+            <div class="ans">认识的本质是主体在实践基础上对客体的能动反映；感性认识（感性、片面）与理性认识（理性、全面）辩证统一：理性认识依赖感性认识，感性认识有待发展到理性认识，二者相互渗透包含；认识运动的总规律：从实践到认识、从认识到实践，循环往复以至无穷，即<span class="highlight-red">实践、认识、再实践、再认识</span>；认识具有反复性、无限性、上升性。</div>
+            <div class="tip">易错点：感性认识与理性认识的依赖关系及认识发展的波浪式前进。</div>
+        </article>
+
+        <article class="item">
+            <h4>真理与价值</h4>
+            <div class="ans">真理是标志主观与客观相符合的哲学范畴，真理的客观性（内容客观、检验标准客观）是真理的本质属性，<span class="highlight-red">真理是一元的</span>；真理的绝对性与相对性辩证统一，反对绝对主义与相对主义；检验真理的标准：实践是唯一标准，逻辑证明是重要补充；价值是客体对主体的有用性，价值评价以真理为基础，坚持真理尺度与价值尺度的统一。</div>
+            <div class="tip">易错点：真理面前人人平等，真理具有客观性且是一元的，不搞多元真理。</div>
+        </article>
+    </section>
+
+    <section id="dialectics">
+        <h3>四、唯物辩证法</h3>
+
+        <article class="item">
+            <h4>联系与发展</h4>
+            <div class="ans">联系具有客观性、普遍性、多样性、条件性；发展的实质是新事物的产生和旧事物的灭亡，新事物是符合客观规律、具有强大生命力和远大前途的事物，新事物必然战胜旧事物（新事物是在旧事物母体中孕育产生、否定了旧事物中消极过时的因素、添加了富有生命力的新内容、适应了已经变化了的环境和条件）。</div>
+            <div class="tip">易错点：联系具有条件性，不能认为毫无条件的万事联系。</div>
+        </article>
+
+        <article class="item">
+            <h4>对立统一规律</h4>
+            <div class="ans">矛盾即对立统一；矛盾的同一性（相互依存、相互转化）与斗争性（相互排斥、相互分离）；<span class="highlight-red">同一性是有条件的相对的，斗争性是无条件的绝对的</span>；内因是事物变化发展的根据，外因是条件，外因通过内因而起作用；矛盾的普遍性（共性）与特殊性（个性）是绝对与相对的关系，矛盾的普遍性和特殊性辩证关系的原理是矛盾问题的精髓；主要矛盾是在复杂事物发展过程中处于支配地位、对事物发展起决定作用的矛盾，次要矛盾处于服从地位；矛盾的主要方面是在矛盾中处于支配地位、起主导作用的一面，事物的性质主要由主要矛盾的主要方面决定；坚持两点论与重点论的统一；<span class="highlight-red">具体问题具体分析是马克思主义活的灵魂</span>。</div>
+            <div class="tip">易错点：同一性与斗争性有无条件的区分；具体问题具体分析的地位。</div>
+        </article>
+
+        <article class="item">
+            <h4>量变质变规律</h4>
+            <div class="ans">量变是事物数量的增减和组成要素排列次序的变动，是保持事物质的相对稳定的不显著变化；质变是事物性质的根本变化，是由一种质态向另一种质态的飞跃；度是保持事物质的稳定性的数量界限；量变是质变的必要准备，质变是量变的必然结果，量变和质变相互渗透；方法论：重视量的积累、抓住时机促成质变、坚持适度原则。</div>
+            <div class="tip">易错点：注意度的概念，过犹不及体现适度原则。</div>
+        </article>
+
+        <article class="item">
+            <h4>否定之否定规律</h4>
+            <div class="ans">辩证否定是事物的自我否定，是事物内部矛盾运动的结果；辩证否定是发展和联系的环节，其实质是<span class="highlight-red">扬弃</span>（既克服又保留）；事物的发展是波浪式前进、螺旋式上升，前途是光明的、道路是曲折的；对待传统文化与外来文化要批判继承、古为今用、洋为中用、推陈出新。</div>
+            <div class="tip">易错点：扬弃包含克服和保留两个方面，缺一不可。</div>
+        </article>
+
+        <article class="item">
+            <h4>五对范畴</h4>
+            <div class="ans">本质与现象（本质是事物的根本性质和构成要素的内在联系，现象是本质的外在表现，假象也是本质的表现、是歪曲的表现）；内容与形式（内容决定形式，形式反作用于内容）；原因与结果（因果联系具有客观性、普遍性、多样性、复杂性）；必然与偶然（必然是确定不移的趋势，偶然是不确定的趋势，二者相互依存、相互转化，要重视偶然性、抓住机遇）；可能性与现实性（可能性是尚未成为现实的存在，现实是已实现了的可能，把握可能要立足现实、创造条件）。</div>
+            <div class="tip">易错点：假象是本质的表现，属于客观存在而非主观幻觉。</div>
+        </article>
+    </section>
+
+    <section id="historical-materialism">
+        <h3>五、唯物史观</h3>
+
+        <article class="item">
+            <h4>唯物史观核心要点</h4>
+            <div class="ans">社会存在包括地理环境、人口因素和物质生产方式，其中<span class="highlight-red">生产方式是社会历史发展的决定力量</span>；社会意识具有相对独立性：与社会存在发展不完全同步性、与经济发展水平不平衡性、历史继承性、相互影响与能动反作用；生产力决定生产关系，生产关系对生产力具有能动的反作用，<span class="highlight-red">生产关系一定要适合生产力状况</span>是人类社会发展的普遍规律；经济基础决定上层建筑，上层建筑（观念上层建筑与政治上层建筑，国家政权是政治上层建筑的核心）对经济基础具有能动反作用，<span class="highlight-red">上层建筑一定要适合经济基础状况</span>是另一普遍规律；社会基本矛盾是社会发展的根本动力；阶级斗争是阶级社会发展的直接动力，改革是社会主义社会发展的直接动力，科学技术是推动社会文明进步的重要力量；人民群众是历史的创造者，是社会物质财富和精神财富的创造者、是社会变革的决定力量，要坚持群众观点和群众路线；杰出人物对历史发展起加速或延缓作用，但不能决定历史发展的总进程和总方向。</div>
+            <div class="tip">易错点：严格区分社会发展根本动力（社会基本矛盾）与阶级社会/社会主义社会的直接动力。</div>
+        </article>
+    </section>
+
+    <section id="political-economy">
+        <h3>六、政治经济学（商品与剩余价值）</h3>
+
+        <article class="item">
+            <h4>商品与价值规律</h4>
+            <div class="ans">商品的二因素是使用价值和价值（交换价值是价值的表现形式），使用价值是价值的物质承担者，价值是商品的本质属性和社会属性；劳动的二重性：具体劳动创造使用价值，抽象劳动形成价值，<span class="highlight-red">劳动二重性是理解马克思主义政治经济学的枢纽</span>；商品的价值量由生产商品的社会必要劳动时间决定（社会必要劳动时间是在现有的社会正常的生产条件下，在社会平均的劳动熟练程度和劳动强度下制造某种使用价值所需要的劳动时间）；价值规律的内容：商品的价值量由生产商品的社会必要劳动时间决定，商品交换以价值量为基础实行等价交换；价值规律的作用：自发地调节生产资料和劳动力在社会各部门之间的分配、自发地刺激社会生产力的发展、自发地调节社会收入的分配（会导致两极分化）；私有制商品经济的基本矛盾是私人劳动和社会劳动的矛盾；货币的五种职能：价值尺度、流通手段、贮藏手段、支付手段、世界货币。</div>
+            <div class="tip">易错点：枢纽是劳动二重性，而非劳动本身或其它因素。</div>
+        </article>
+
+        <article class="item">
+            <h4>资本与剩余价值</h4>
+            <div class="ans">货币转化为资本的前提是<span class="highlight-red">劳动力成为商品</span>（劳动力商品的使用价值的特殊性在于它能创造出比自身价值更大的价值）；资本总公式 G—W—G′，增殖是资本运动的目的；按在剩余价值生产中所起的作用不同，资本分为不变资本（以生产资料形态存在，价值不增殖）与可变资本（以劳动力形态存在，价值会增殖）；剩余价值率是剩余价值和可变资本的比率 m′=m/v，它表示资本家对工人的剥削程度；绝对剩余价值与相对剩余价值；超额剩余价值是单个资本家率先提高劳动生产率获得的；资本积累的源泉是剩余价值，资本有机构成是 c∶v；<span class="highlight-red">资本主义的基本矛盾是生产社会化和生产资料资本主义私人占有之间的矛盾</span>，它是资本主义一切矛盾和冲突的总根源。</div>
+            <div class="tip">易错点：不变资本与可变资本的划分依据是生产中起的作用不同，而非流通领域。</div>
+        </article>
+    </section>
+
+    <section id="capitalism">
+        <h3>七、垄断与资本主义趋势</h3>
+
+        <article class="item">
+            <h4>垄断与资本主义历史趋势</h4>
+            <div class="ans">自由竞争引起生产和资本的集中，生产集中发展到一定阶段必然走向垄断；<span class="highlight-red">垄断没有消除竞争</span>（垄断与竞争并存）；国家垄断资本主义是资本主义生产关系的部分质变；经济全球化的表现是生产全球化、贸易全球化、金融全球化，其影响是双刃剑；资本主义的历史地位：两个必然（资本主义必然灭亡、社会主义必然胜利是历史发展的总趋势）与两个决不会（无论哪一个社会形态，在它所能容纳的全部生产力发挥出来之前，是决不会灭亡的；新的更高的生产关系，在它的物质存在条件在旧社会的胎胞里成熟之前，是决不会出现的）。</div>
+            <div class="tip">易错点：垄断并未消除竞争，反而使竞争更加复杂剧烈。</div>
+        </article>
+    </section>
+
+    <script>
+        // 1. 实时搜索过滤功能
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
+            const items = document.querySelectorAll('.item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // 2. 自测模式开关功能
+        const toggleTestBtn = document.getElementById('toggleTestBtn');
+        const body = document.body;
+
+        toggleTestBtn.addEventListener('click', function() {
+            body.classList.toggle('test-mode');
+            if (body.classList.contains('test-mode')) {
+                this.textContent = '退出自测模式';
+            } else {
+                this.textContent = '开启自测模式';
+                // 退出时移除所有展开状态
+                document.querySelectorAll('.item.expanded').forEach(i => i.classList.remove('expanded'));
+            }
+        });
+
+        // 3. 自测模式下点击单条 item 展开/收起
+        const items = document.querySelectorAll('.item');
+        items.forEach(item => {
+            item.addEventListener('click', function() {
+                if (body.classList.contains('test-mode')) {
+                    this.classList.toggle('expanded');
+                }
+            });
+        });
+    </script>
+<style id="quizfix-style">
+/* QUIZFIX: 遮挡自测 v2 —— 只遮答案段，题干/框架保持可见（覆盖各页旧的全遮规则）
+   兼容两种模式类名： quiz-mode / test-mode ；展开类名： revealed / expanded */
+body.quiz-mode .item .ans, body.quiz-mode .item .tip,
+body.quiz-mode .item:not(.revealed) .ans, body.quiz-mode .item:not(.revealed) .tip,
+body.quiz-mode .item .ans *, body.quiz-mode .item .tip *,
+body.test-mode .item .ans, body.test-mode .item .tip,
+body.test-mode .item:not(.revealed) .ans, body.test-mode .item:not(.revealed) .tip,
+body.test-mode .item:not(.expanded) .ans, body.test-mode .item:not(.expanded) .tip,
+body.test-mode .item .ans *, body.test-mode .item .tip * {
+  color: inherit !important;
+  background-color: transparent !important;
+  filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: none !important;
+}
+body.quiz-mode .item:not(.revealed) .msk,
+body.test-mode .item:not(.revealed):not(.expanded) .msk {
+  color: transparent !important;
+  background-color: #DCD4BF !important;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #C7BC9E;
+  filter: none !important;
+  user-select: none;
+}
+body.quiz-mode .item:not(.revealed) .msk *,
+body.test-mode .item:not(.revealed):not(.expanded) .msk * {
+  color: transparent !important;
+  background-color: transparent !important;
+}
+</style>
+<script>
+/* QUIZFIX-JS: 把答案段标成 .msk —— ①已有高亮标记（k/hl/num/key/err/mono/quiz-cell）
+   ②公式行按分隔符切分，遮 =、~、⇒、⇔ 之后的结果段 ③对比表遮首列以外的数据格 */
+(function () {
+  function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  ready(function () {
+    var HL = ['k', 'hl', 'num', 'key', 'err', 'mono', 'quiz-cell', 'formula', 'red', 'code', 'code-inline', 'highlight-red', 'key-red'];
+    document.querySelectorAll('.item').forEach(function (item) {
+      var sel = HL.map(function (c) { return '.ans .' + c + ', .tip .' + c; }).join(', ');
+      item.querySelectorAll(sel).forEach(function (sp) { sp.classList.add('msk'); });
+      var ans = item.querySelector('.ans');
+      if (ans) {
+        var walker = document.createTreeWalker(ans, NodeFilter.SHOW_TEXT, {
+          acceptNode: function (node) {
+            if (!node.nodeValue || !/[~=]|⇒|⇔/.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+            var p = node.parentElement;
+            if (!p || p.closest('.msk') || p.closest('sup') || p.closest('sub')) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function (node) {
+          var frag = document.createDocumentFragment();
+          node.nodeValue.split(/(；|;)/).forEach(function (seg, idx) {
+            if (idx % 2 === 1) { frag.appendChild(document.createTextNode(seg)); return; }
+            var m = seg.match(/^([\s\S]*?[~=⇒⇔]\s*)([\s\S]+)$/);
+            if (m && m[2].replace(/[\s。．.]+$/, '').length > 0) {
+              frag.appendChild(document.createTextNode(m[1]));
+              var s = document.createElement('span');
+              s.className = 'msk';
+              s.textContent = m[2];
+              frag.appendChild(s);
+            } else {
+              frag.appendChild(document.createTextNode(seg));
+            }
+          });
+          node.parentNode.replaceChild(frag, node);
+        });
+      }
+      item.querySelectorAll('table').forEach(function (tb) {
+        tb.querySelectorAll('tr').forEach(function (tr) {
+          tr.querySelectorAll('td').forEach(function (td, ci) {
+            if (ci === 0 || td.querySelector('.msk')) return;
+            var s = document.createElement('span');
+            s.className = 'msk';
+            while (td.firstChild) s.appendChild(td.firstChild);
+            td.appendChild(s);
+          });
+        });
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

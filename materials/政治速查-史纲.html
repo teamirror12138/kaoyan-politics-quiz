@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>政治速查 · 中国近现代史纲要</title>
+<style>
+  :root {
+    --bg: #F2EFE9;
+    --card-bg: #FAF8F5;
+    --primary: #1B4D3E;
+    --primary-light: #2A6B57;
+    --accent: #D9381E;
+    --text: #1E201D;
+    --text-muted: #5A5E58;
+    --border: #D8D3C8;
+    --mask-bg: #E2DDD3;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Serif SC", serif;
+    font-size: 15px;
+    line-height: 1.65;
+    padding-bottom: 60px;
+  }
+
+  /* 顶部报头 */
+  header {
+    background-color: var(--primary);
+    color: #FAF8F5;
+    padding: 18px 20px 14px;
+    border-bottom: 3px solid var(--accent);
+  }
+
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  header .subtitle {
+    font-size: 14px;
+    color: #D2DED9;
+  }
+
+  /* 工具条 */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    padding: 10px 20px;
+  }
+
+  .toolbar-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    flex: 1 1 320px;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 180px;
+    max-width: 360px;
+    padding: 7px 12px;
+    font-size: 14px;
+    border: 1px solid #B8B2A6;
+    background-color: var(--card-bg);
+    color: var(--text);
+    border-radius: 3px;
+    outline: none;
+  }
+
+  .search-input:focus {
+    border-color: var(--primary);
+  }
+
+  .btn-toggle {
+    padding: 7px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: var(--card-bg);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .btn-toggle:hover {
+    background-color: #E6ECE9;
+  }
+
+  .btn-toggle.active {
+    background-color: var(--accent);
+    color: #FFFFFF;
+    border-color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--primary);
+    padding: 4px 9px;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  .nav-links a:hover {
+    border-color: var(--primary);
+    background-color: #E6ECE9;
+  }
+
+  /* 主容器 */
+  main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 20px;
+  }
+
+  .status-bar {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  section {
+    margin-bottom: 28px;
+    scroll-margin-top: 70px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    border-left: 5px solid var(--primary);
+    padding-left: 10px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+
+  .section-title span {
+    font-size: 14px;
+    font-weight: normal;
+    color: var(--text-muted);
+  }
+
+  /* 速查表格样式（用于直观总览，同时下方紧跟标准 item） */
+  .table-wrap {
+    overflow-x: auto;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    background-color: var(--card-bg);
+  }
+
+  table.overview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  table.overview-table th {
+    background-color: var(--primary);
+    color: #FAF8F5;
+    padding: 8px 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  table.overview-table td {
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  table.overview-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  table.overview-table tr:nth-child(even) {
+    background-color: #F5F2EC;
+  }
+
+  .time-col {
+    font-weight: 700;
+    color: var(--primary);
+    white-space: nowrap;
+    width: 160px;
+  }
+
+  .event-col {
+    font-weight: 600;
+    width: 220px;
+  }
+
+  /* 条目网格系统 */
+  .item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 12px;
+  }
+
+  .item-grid.dense {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 10px;
+  }
+
+  article.item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--primary);
+    padding: 12px 14px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: border-color 0.15s ease;
+  }
+
+  article.item.core-must {
+    border-top: 2px solid var(--accent);
+  }
+
+  article.item h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 6px;
+    line-height: 1.4;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  article.item h4 .tag {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 1px 5px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  article.item.core-must h4 .tag {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  article.item .ans {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 6px;
+    text-align: justify;
+  }
+
+  article.item .tip {
+    font-size: 14px;
+    color: var(--text-muted);
+    border-top: 1px dashed var(--border);
+    padding-top: 5px;
+    margin-top: auto;
+  }
+
+  article.item .tip:empty {
+    display: none;
+  }
+
+  /* 强调色与关键词 */
+  .key {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  strong {
+    font-weight: 700;
+    color: #000000;
+  }
+
+  /* 遮挡自测模式 */
+  body.quiz-mode article.item {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  body.quiz-mode article.item:hover {
+    border-color: var(--primary);
+  }
+
+  body.quiz-mode article.item:not(.revealed) .ans,
+  body.quiz-mode article.item:not(.revealed) .tip {
+    color: transparent !important;
+    background-color: var(--mask-bg);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  body.quiz-mode article.item:not(.revealed) .ans *,
+  body.quiz-mode article.item:not(.revealed) .tip * {
+    color: transparent !important;
+    background: transparent !important;
+  }
+
+  body.quiz-mode article.item:not(.revealed) .ans::after {
+    content: "点击展开自测核对";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  /* 自测模式下同样遮挡总览表格中的结论列 */
+  body.quiz-mode table.overview-table td.mask-cell:not(.revealed-cell) {
+    color: transparent !important;
+    background-color: var(--mask-bg);
+    cursor: pointer;
+    user-select: none;
+  }
+  body.quiz-mode table.overview-table td.mask-cell:not(.revealed-cell) * {
+    color: transparent !important;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .item-grid, .item-grid.dense {
+      grid-template-columns: 1fr;
+    }
+    .toolbar {
+      padding: 8px 12px;
+    }
+    main {
+      padding: 12px;
+    }
+    .time-col, .event-col {
+      width: auto;
+      white-space: normal;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>政治速查 · 中国近现代史纲要</h1>
+    <div class="subtitle">考研政治教材稳定表述复习墙 · 严禁改字 · 高密度背诵版</div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="controls">
+      <input type="text" id="searchInput" class="search-input" placeholder="输入关键词实时过滤条目（如：开端、转折、土地、七大）..." autocomplete="off">
+      <button type="button" id="quizBtn" class="btn-toggle">开启遮挡自测</button>
+    </div>
+    <nav class="nav-links">
+      <a href="#sec-timeline">一、大事时间线总表</a>
+      <a href="#sec-meetings">二、重要会议速查表</a>
+      <a href="#sec-core">三、核心清单逐条展开</a>
+      <a href="#sec-supp">四、教材高频考点精编</a>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <div class="status-bar">
+    <span id="countStatus">当前显示全部复习条目</span>
+    <span>提示：朱红色为易错与核心定性表述；开启「遮挡自测」后点击单条卡片可展开或收起。</span>
+  </div>
+
+  <!-- 章节一：大事时间线总表 -->
+  <section id="sec-timeline">
+    <h2 class="section-title">一、大事时间线总表<span>教材核心坐标 · 逐字呈现</span></h2>
+
+    <div class="table-wrap">
+      <table class="overview-table">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>事件</th>
+            <th>意义 / 核心标准表述（自测模式下点击单元格可单独显隐）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="time-col">1840</td><td class="event-col">鸦片战争</td><td class="mask-cell"><span class="key">中国近代史的开端</span>，中国<span class="key">开始沦为</span>半殖民地半封建社会</td></tr>
+          <tr><td class="time-col">1851—1864</td><td class="event-col">太平天国运动</td><td class="mask-cell"><span class="key">旧式农民战争的最高峰</span></td></tr>
+          <tr><td class="time-col">19 世纪 60 至 90 年代</td><td class="event-col">洋务运动</td><td class="mask-cell">以「<span class="key">自强</span>」「<span class="key">求富</span>」为目标，中国<span class="key">近代化的早期探索</span></td></tr>
+          <tr><td class="time-col">1894—1895</td><td class="event-col">甲午战争与《马关条约》</td><td class="mask-cell">中国半殖民地化程度<span class="key">大大加深</span></td></tr>
+          <tr><td class="time-col">1898</td><td class="event-col">戊戌变法</td><td class="mask-cell"><span class="key">资产阶级维新派的改良运动</span></td></tr>
+          <tr><td class="time-col">1900—1901</td><td class="event-col">八国联军侵华与《辛丑条约》</td><td class="mask-cell">中国<span class="key">完全陷入</span>半殖民地半封建社会的深渊</td></tr>
+          <tr><td class="time-col">1911</td><td class="event-col">辛亥革命</td><td class="mask-cell">结束了统治中国两千多年的<span class="key">君主专制制度</span>，建立了共和政体，使民主共和的观念深入人心，但<span class="key">没有改变</span>中国半殖民地半封建的社会性质</td></tr>
+          <tr><td class="time-col">1915</td><td class="event-col">新文化运动</td><td class="mask-cell">以<span class="key">民主与科学</span>为旗帜的思想解放运动</td></tr>
+          <tr><td class="time-col">1919</td><td class="event-col">五四运动</td><td class="mask-cell"><span class="key">中国新民主主义革命的开端</span>，是一场<span class="key">彻底反帝反封建</span>的伟大爱国革命运动，促进了马克思主义在中国的传播</td></tr>
+          <tr><td class="time-col">1921</td><td class="event-col">中国共产党第一次全国代表大会</td><td class="mask-cell">中国共产党成立，这是<span class="key">开天辟地的大事变</span></td></tr>
+          <tr><td class="time-col">1927</td><td class="event-col">南昌起义</td><td class="mask-cell">打响了<span class="key">武装反抗国民党反动派的第一枪</span>，是中国共产党<span class="key">独立领导革命战争、创建人民军队的开端</span></td></tr>
+          <tr><td class="time-col">1927</td><td class="event-col">八七会议</td><td class="mask-cell">毛泽东提出「<span class="key">枪杆子里出政权</span>」</td></tr>
+          <tr><td class="time-col">遵义会议（1935）</td><td class="event-col">遵义会议</td><td class="mask-cell">中国共产党历史上一个<span class="key">生死攸关的转折点</span>，开始确立以毛泽东为主要代表的马克思主义正确路线在党中央的领导地位</td></tr>
+          <tr><td class="time-col">1931</td><td class="event-col">九一八事变</td><td class="mask-cell"><span class="key">中国人民抗日战争的起点</span>，揭开了<span class="key">世界反法西斯战争的序幕</span></td></tr>
+          <tr><td class="time-col">1936</td><td class="event-col">西安事变</td><td class="mask-cell">成为<span class="key">时局转换的枢纽</span>，促进了抗日民族统一战线的建立</td></tr>
+          <tr><td class="time-col">1937</td><td class="event-col">七七事变</td><td class="mask-cell"><span class="key">全民族抗战开始</span>；中国共产党是全民族抗战的<span class="key">中流砥柱</span></td></tr>
+          <tr><td class="time-col">1945</td><td class="event-col">中共七大</td><td class="mask-cell">确立<span class="key">毛泽东思想</span>为党的指导思想并写入党章</td></tr>
+          <tr><td class="time-col">1945</td><td class="event-col">抗日战争胜利</td><td class="mask-cell">近代以来中国人民反抗外敌入侵<span class="key">第一次取得完全胜利</span>，中国是世界反法西斯战争的<span class="key">东方主战场</span></td></tr>
+          <tr><td class="time-col">1948.9—1949.1</td><td class="event-col">三大战役（辽沈、淮海、平津）</td><td class="mask-cell">国民党的主要军事力量<span class="key">基本上被消灭</span></td></tr>
+          <tr><td class="time-col">1949</td><td class="event-col">中华人民共和国成立</td><td class="mask-cell"><span class="key">结束了半殖民地半封建社会的历史</span>，中国人民从此站起来了</td></tr>
+          <tr><td class="time-col">1950—1953</td><td class="event-col">抗美援朝</td><td class="mask-cell">保家卫国，被称为新中国的「<span class="key">立国之战</span>」</td></tr>
+          <tr><td class="time-col">1953</td><td class="event-col">过渡时期总路线与一五计划</td><td class="mask-cell"><span class="key">过渡时期总路线</span>与<span class="key">第一个五年计划</span>开始</td></tr>
+          <tr><td class="time-col">1956</td><td class="event-col">三大改造基本完成</td><td class="mask-cell"><span class="key">社会主义基本制度确立</span>，中国由此<span class="key">进入社会主义社会</span></td></tr>
+          <tr><td class="time-col">1978</td><td class="event-col">十一届三中全会</td><td class="mask-cell"><span class="key">新中国成立以来党的历史上具有深远意义的伟大转折</span>，开启了改革开放和社会主义现代化建设新时期</td></tr>
+          <tr><td class="time-col">1992</td><td class="event-col">邓小平南方谈话与党的十四大</td><td class="mask-cell">十四大确立<span class="key">社会主义市场经济体制</span>的改革目标</td></tr>
+          <tr><td class="time-col">2001</td><td class="event-col">中国加入世界贸易组织</td><td class="mask-cell">中国加入世界贸易组织</td></tr>
+          <tr><td class="time-col">2012</td><td class="event-col">党的十八大</td><td class="mask-cell">此后<span class="key">中国特色社会主义进入新时代</span>（党的十九大作出「中国特色社会主义进入新时代」的重大政治论断）</td></tr>
+          <tr><td class="time-col">2017</td><td class="event-col">党的十九大</td><td class="mask-cell">确立<span class="key">习近平新时代中国特色社会主义思想</span>的指导地位，宣告中国特色社会主义进入新时代，指出我国<span class="key">社会主要矛盾已经转化</span></td></tr>
+          <tr><td class="time-col">2021</td><td class="event-col">建党一百周年</td><td class="mask-cell">实现了<span class="key">第一个百年奋斗目标</span>，在中华大地上<span class="key">全面建成了小康社会</span></td></tr>
+          <tr><td class="time-col">2022</td><td class="event-col">党的二十大</td><td class="mask-cell">提出<span class="key">以中国式现代化全面推进中华民族伟大复兴</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="item-grid dense">
+      <article class="item core-must">
+        <h4><span>1840 鸦片战争</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1840 鸦片战争：<span class="key">中国近代史的开端</span>，中国<span class="key">开始沦为</span>半殖民地半封建社会</div>
+        <p class="tip">易错点：鸦片战争是「中国近代史」的开端；五四运动是「中国新民主主义革命」的开端。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1851—1864 太平天国运动</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1851—1864 太平天国运动：<span class="key">旧式农民战争的最高峰</span></div>
+        <p class="tip">易错点：仍属于旧式农民战争范畴，不是新民主主义性质的农民运动。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>19 世纪 60 至 90 年代 洋务运动</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">19 世纪 60 至 90 年代 洋务运动：以「<span class="key">自强</span>」「<span class="key">求富</span>」为目标，中国<span class="key">近代化的早期探索</span></div>
+        <p class="tip">易错点：前期求「自强」兴办近代军事工业，后期求「求富」兴办近代民用企业；甲午战争北洋水师覆灭标志其破产。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1894—1895 甲午战争与《马关条约》</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1894—1895 甲午战争与《马关条约》：中国半殖民地化程度<span class="key">大大加深</span></div>
+        <p class="tip">易错点：区分三个程度——《南京条约》开始沦为、《马关条约》大大加深、《辛丑条约》完全陷入。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1898 戊戌变法</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1898 戊戌变法：<span class="key">资产阶级维新派的改良运动</span></div>
+        <p class="tip">易错点：主张君主立宪，属于自上而下的资产阶级改良运动，而非革命运动。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1900—1901 八国联军侵华与《辛丑条约》</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1900—1901 八国联军侵华与《辛丑条约》：中国<span class="key">完全陷入</span>半殖民地半封建社会的深渊</div>
+        <p class="tip">易错点：《辛丑条约》标志清政府完全沦为「洋人的朝廷」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1911 辛亥革命</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1911 辛亥革命：结束了统治中国两千多年的<span class="key">君主专制制度</span>，建立了共和政体，使民主共和的观念深入人心，但<span class="key">没有改变</span>中国半殖民地半封建的社会性质</div>
+        <p class="tip">易错点：必考陷阱！结束的是「君主专制制度」（封建帝制），绝不能写成结束了「封建制度」或「封建剥削制度」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1915 新文化运动</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1915 新文化运动：以<span class="key">民主与科学</span>为旗帜的思想解放运动</div>
+        <p class="tip">易错点：五四运动以前的初期新文化运动属于资产阶级民主主义思想范畴。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1919 五四运动</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1919 五四运动：<span class="key">中国新民主主义革命的开端</span>，是一场<span class="key">彻底反帝反封建</span>的伟大爱国革命运动，促进了马克思主义在中国的传播</div>
+        <p class="tip">易错点：注意「彻底」二字，辛亥革命没有提出彻底的反帝反封建革命纲领，而五四运动具备彻底反帝反封建的革命性。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1921 中国共产党第一次全国代表大会</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1921 中国共产党第一次全国代表大会：中国共产党成立，这是<span class="key">开天辟地的大事变</span></div>
+        <p class="tip">易错点：实现了中国历史上最广泛最深刻的社会变革是 1956 年社会主义基本制度确立，中共成立是「开天辟地的大事变」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1927 南昌起义 & 八七会议</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1927 南昌起义：打响了<span class="key">武装反抗国民党反动派的第一枪</span>，是中国共产党<span class="key">独立领导革命战争、创建人民军队的开端</span>；八七会议：毛泽东提出「<span class="key">枪杆子里出政权</span>」</div>
+        <p class="tip">易错点：南昌起义开启了独立领导武装斗争和创建人民军队；八七会议开启了由大革命失败到土地革命战争兴起的历史性转变。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>遵义会议（1935）</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">遵义会议（1935）：中国共产党历史上一个<span class="key">生死攸关的转折点</span>，开始确立以毛泽东为主要代表的马克思主义正确路线在党中央的领导地位</div>
+        <p class="tip">易错点：遵义会议解决的是军事问题和组织问题；确立毛泽东思想为党的指导思想是 1945 年中共七大。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1931 九一八事变</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1931 九一八事变：<span class="key">中国人民抗日战争的起点</span>，揭开了<span class="key">世界反法西斯战争的序幕</span></div>
+        <p class="tip">易错点：九一八事变是「抗日战争的起点」（局部抗战开始）；七七事变是「全民族抗战开始」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1936 西安事变</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1936 西安事变：成为<span class="key">时局转换的枢纽</span>，促进了抗日民族统一战线的建立</div>
+        <p class="tip">易错点：西安事变和平解决标志着十年内战的局面基本结束，国内和平初步实现。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1937 七七事变</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1937 七七事变：<span class="key">全民族抗战开始</span>；中国共产党是全民族抗战的<span class="key">中流砥柱</span></div>
+        <p class="tip">易错点：开辟了世界反法西斯战争的东方主战场。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1945 中共七大 & 抗日战争胜利</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1945 中共七大：确立<span class="key">毛泽东思想</span>为党的指导思想并写入党章；抗日战争胜利：近代以来中国人民反抗外敌入侵<span class="key">第一次取得完全胜利</span>，中国是世界反法西斯战争的<span class="key">东方主战场</span></div>
+        <p class="tip">易错点：注意「第一次取得完全胜利」这一限定词。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1948.9—1949.1 三大战役（辽沈、淮海、平津）</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1948.9—1949.1 三大战役（辽沈、淮海、平津）：国民党的主要军事力量<span class="key">基本上被消灭</span></div>
+        <p class="tip">易错点：是「主要军事力量基本上被消灭」，不是国民党政权覆灭（1949.4 占领南京延续 22 年国民党反动统治覆灭）。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1949 中华人民共和国成立</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1949 中华人民共和国成立：<span class="key">结束了半殖民地半封建社会的历史</span>，中国人民从此站起来了</div>
+        <p class="tip">易错点：1949 年新中国成立进入的是「新民主主义社会」（过渡性质），1956 年三大改造基本完成才进入「社会主义社会」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1950—1953 抗美援朝 & 1953 总路线与一五计划</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1950—1953 抗美援朝：保家卫国，被称为新中国的「<span class="key">立国之战</span>」；1953 <span class="key">过渡时期总路线</span>与<span class="key">第一个五年计划</span>开始</div>
+        <p class="tip">易错点：过渡时期总路线核心是「一化三改」，一化是主体，三改是两翼。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1956 三大改造基本完成</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1956 三大改造基本完成：<span class="key">社会主义基本制度确立</span>，中国由此<span class="key">进入社会主义社会</span></div>
+        <p class="tip">易错点：这是中国进入社会主义社会的唯一准确时间坐标（1956 年）。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1978 十一届三中全会</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1978 十一届三中全会：<span class="key">新中国成立以来党的历史上具有深远意义的伟大转折</span>，开启了改革开放和社会主义现代化建设新时期</div>
+        <p class="tip">易错点：遵义会议是「党的历史上生死攸关的转折点」；十一届三中全会是「新中国成立以来党的历史上具有深远意义的伟大转折」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>1992 邓小平南方谈话与党的十四大 & 2001 入世</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">1992 邓小平南方谈话与党的十四大：十四大确立<span class="key">社会主义市场经济体制</span>的改革目标；2001 中国加入世界贸易组织</div>
+        <p class="tip">易错点：把建立社会主义市场经济体制确立为改革目标是「十四大」；入世标志对外开放进入新阶段。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>2012 党的十八大 & 2017 党的十九大</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">2012 党的十八大：此后<span class="key">中国特色社会主义进入新时代</span>（党的十九大作出「中国特色社会主义进入新时代」的重大政治论断）；2017 党的十九大：确立<span class="key">习近平新时代中国特色社会主义思想</span>的指导地位，宣告中国特色社会主义进入新时代，指出我国<span class="key">社会主要矛盾已经转化</span></div>
+        <p class="tip">易错点：进入新时代的起始时间节点是「党的十八大以来」，作出这一重大政治论断的会议是「党的十九大」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>2021 建党一百周年 & 2022 党的二十大</span><span class="tag">时间线必背</span></h4>
+        <div class="ans">2021 建党一百周年：实现了<span class="key">第一个百年奋斗目标</span>，在中华大地上<span class="key">全面建成了小康社会</span>；2022 党的二十大：提出<span class="key">以中国式现代化全面推进中华民族伟大复兴</span></div>
+        <p class="tip">易错点：2021 年是「全面建成小康社会」（不是全面建成社会主义现代化强国）。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 章节二：重要会议速查表 -->
+  <section id="sec-meetings">
+    <h2 class="section-title">二、重要会议速查表<span>党史核心会议 · 逐字呈现</span></h2>
+
+    <div class="table-wrap">
+      <table class="overview-table">
+        <thead>
+          <tr>
+            <th>会议名称（时间）</th>
+            <th>核心结论（必须逐字掌握）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="event-col">中共一大（1921）</td><td class="mask-cell">确定党的名称为<span class="key">中国共产党</span>，通过<span class="key">党的第一个纲领</span>，选举产生党的领导机构</td></tr>
+          <tr><td class="event-col">中共二大（1922）</td><td class="mask-cell"><span class="key">第一次提出彻底的反帝反封建的民主革命纲领</span>，制定<span class="key">党的第一部党章</span></td></tr>
+          <tr><td class="event-col">中共三大（1923）</td><td class="mask-cell">决定共产党员以<span class="key">个人身份加入国民党</span>，实现国共合作</td></tr>
+          <tr><td class="event-col">遵义会议（1935）</td><td class="mask-cell">集中解决当时具有决定意义的<span class="key">军事问题和组织问题</span>，是党的历史上<span class="key">生死攸关的转折点</span></td></tr>
+          <tr><td class="event-col">瓦窑堡会议（1935）</td><td class="mask-cell">确立<span class="key">抗日民族统一战线的策略方针</span></td></tr>
+          <tr><td class="event-col">洛川会议（1937）</td><td class="mask-cell">制定<span class="key">全面抗战路线</span>和<span class="key">抗日救国十大纲领</span></td></tr>
+          <tr><td class="event-col">中共七大（1945）</td><td class="mask-cell">确立<span class="key">毛泽东思想</span>为党的指导思想，通过了《<span class="key">论联合政府</span>》</td></tr>
+          <tr><td class="event-col">中共七届二中全会（1949）</td><td class="mask-cell">提出「<span class="key">两个务必</span>」（务必继续保持谦虚、谨慎、不骄、不躁的作风，务必继续保持艰苦奋斗的作风），党的工作重心<span class="key">由乡村转移到城市</span></td></tr>
+          <tr><td class="event-col">十一届三中全会（1978）</td><td class="mask-cell">重新确立<span class="key">解放思想、实事求是的思想路线</span>，作出把党和国家的工作中心<span class="key">转移到经济建设上来、实行改革开放</span>的历史性决策</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="item-grid dense">
+      <article class="item core-must">
+        <h4><span>中共一大（1921）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">中共一大（1921）：确定党的名称为<span class="key">中国共产党</span>，通过<span class="key">党的第一个纲领</span>，选举产生党的领导机构</div>
+        <p class="tip">易错点：一大通过的是「党的第一个纲领」，二大制定的是「党的第一部党章」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>中共二大（1922）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">中共二大（1922）：<span class="key">第一次提出彻底的反帝反封建的民主革命纲领</span>，制定<span class="key">党的第一部党章</span></div>
+        <p class="tip">易错点：分清最高纲领（实现社会主义、共产主义）与当前阶段最低纲领（打倒军阀，推翻国际帝国主义的压迫，统一中国为真正的民主共和国）。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>中共三大（1923）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">中共三大（1923）：决定共产党员以<span class="key">个人身份加入国民党</span>，实现国共合作</div>
+        <p class="tip">易错点：是「党内合作」方式（以个人身份加入），同时保持共产党在政治上、思想上和组织上的独立性；1924 年国民党一大标志第一次国共合作正式形成。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>遵义会议（1935）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">遵义会议（1935）：集中解决当时具有决定意义的<span class="key">军事问题和组织问题</span>，是党的历史上<span class="key">生死攸关的转折点</span></div>
+        <p class="tip">易错点：注意当时紧迫形势下集中解决的是「军事问题和组织问题」，尚未全面清算政治路线和思想路线问题（延安整风及六届七中全会解决思想路线问题）。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>瓦窑堡会议（1935）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">瓦窑堡会议（1935）：确立<span class="key">抗日民族统一战线的策略方针</span></div>
+        <p class="tip">易错点：1935.12 瓦窑堡会议解决的是「政治路线」问题，阐明建立抗日民族统一战线的可能性，批判了「左」倾关门主义。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>洛川会议（1937）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">洛川会议（1937）：制定<span class="key">全面抗战路线</span>和<span class="key">抗日救国十大纲领</span></div>
+        <p class="tip">易错点：瓦窑堡会议（抗日民族统一战线策略方针）与洛川会议（全面抗战路线、抗日救国十大纲领）是选择题最高频张冠李戴项。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>中共七大（1945）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">中共七大（1945）：确立<span class="key">毛泽东思想</span>为党的指导思想，通过了《<span class="key">论联合政府</span>》</div>
+        <p class="tip">易错点：毛泽东在七大作《论联合政府》政治报告，系统阐述了党的三大优良作风（理论和实践相结合、和人民群众紧密地联系在一起、自我批评）。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>中共七届二中全会（1949）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">中共七届二中全会（1949）：提出「<span class="key">两个务必</span>」（务必继续保持谦虚、谨慎、不骄、不躁的作风，务必继续保持艰苦奋斗的作风），党的工作重心<span class="key">由乡村转移到城市</span></div>
+        <p class="tip">易错点：1927 年秋收起义后向井冈山进军是由城市转入农村；1949 年七届二中全会是由乡村转移到城市。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>十一届三中全会（1978）</span><span class="tag">重要会议</span></h4>
+        <div class="ans">十一届三中全会（1978）：重新确立<span class="key">解放思想、实事求是的思想路线</span>，作出把党和国家的工作中心<span class="key">转移到经济建设上来、实行改革开放</span>的历史性决策</div>
+        <p class="tip">易错点：彻底否定了「以阶级斗争为纲」的错误理论和实践。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 章节三：核心清单逐条展开 -->
+  <section id="sec-core">
+    <h2 class="section-title">三、核心清单逐条展开<span>核心结论 · 原文逐字锁定</span></h2>
+
+    <div class="item-grid">
+      <article class="item core-must">
+        <h4><span>近代中国社会性质与主要矛盾</span><span class="tag">核心清单</span></h4>
+        <div class="ans">近代中国是<strong>半殖民地半封建社会</strong>，其主要矛盾是<span class="key">帝国主义和中华民族的矛盾</span>、<span class="key">封建主义和人民大众的矛盾</span>，其中<span class="key">帝国主义和中华民族的矛盾是最主要的矛盾</span>；近代中国人民面临的两大历史任务是<span class="key">争取民族独立、人民解放</span>和<span class="key">实现国家富强、人民幸福</span></div>
+        <p class="tip">易错点：最主要的矛盾是「帝国主义和中华民族的矛盾」；两大历史任务中，前者为后者扫清障碍、创造必要前提，后者是前者的最终目的和必然要求。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>各阶级探索的失败结论</span><span class="tag">核心清单</span></h4>
+        <div class="ans">太平天国失败的根本原因是<span class="key">农民阶级的局限性</span>（缺乏先进阶级的领导和科学理论的指导）；洋务运动失败的根本原因是<span class="key">只学习西方的科学技术、不变革落后的封建制度</span>（<strong>封建性</strong>与<strong>外国资本主义的依赖性</strong>、<strong>洋务企业的管理腐败性</strong>并提）；戊戌变法失败的原因包括维新派<span class="key">不敢否定封建主义、对帝国主义抱有幻想、害怕和脱离人民群众</span>；辛亥革命失败的原因是<span class="key">资产阶级革命派的软弱性和妥协性</span>（没有提出彻底的反帝反封建的革命纲领、不能充分发动和依靠人民群众、没有建成坚强的革命政党）；共同结论：<strong>无论是农民阶级、地主阶级还是资产阶级，都不能领导中国革命取得成功，<span class="key">资本主义道路在中国走不通</span></strong></div>
+        <p class="tip">易错点：注意区分「太平天国-农民阶级局限性」「洋务运动-不变革封建制度/三大特性」「戊戌变法-不敢否定封建主义等三点」「辛亥革命-软弱性和妥协性等三点」。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>辛亥革命的历史意义</span><span class="tag">核心清单</span></h4>
+        <div class="ans">推翻了<strong>清王朝的统治</strong>，沉重打击了中外反动势力；结束了统治中国两千多年的<span class="key">君主专制制度</span>，建立了中国历史上第一个<strong>资产阶级共和政府</strong>，使民主共和的观念开始深入人心；推动了中国人民的思想解放；推动了中国的社会变革；推动了亚洲各国民族解放运动的高涨；根本局限：<span class="key">没有完成反帝反封建的历史任务，没有改变中国半殖民地半封建的社会性质</span></div>
+        <p class="tip">易错点：辛亥革命是比较完全意义上的资产阶级民主革命，但仍然属于旧民主主义革命范畴。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>五四运动与建党</span><span class="tag">核心清单</span></h4>
+        <div class="ans">五四运动的直接导火索是<span class="key">巴黎和会中国外交的失败</span>；五四运动促进了<span class="key">马克思主义在中国的传播及其与中国工人运动的结合</span>；中国共产党早期组织成立后开展了同反马克思主义思潮的论战；中国共产党的成立是中华民族发展史上<span class="key">开天辟地的大事变</span>，自从有了中国共产党，<strong>中国革命的面貌就焕然一新了</strong></div>
+        <p class="tip">易错点：中国共产党成立是马克思主义同中国工人运动相结合的产物；早期三次论战是：同胡适围绕「问题与主义」的论战、同张东荪和梁启超关于社会主义的论战、同无政府主义的论战。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>土地革命与长征</span><span class="tag">核心清单</span></h4>
+        <div class="ans">农村革命根据地的开辟是<strong>中国革命发展的客观规律</strong>（<span class="key">半殖民地半封建社会的政治经济发展不平衡</span>）；红军长征的胜利是<strong>革命英雄主义的胜利、是革命乐观主义的胜利</strong>，宣告了国民党反动派消灭中国共产党和红军的图谋失败，实现了红军的<span class="key">战略大转移</span></div>
+        <p class="tip">易错点：中国红色政权能够存在和发展的根本原因是「近代中国是一个政治、经济、文化发展极不平衡的半殖民地半封建大国」（客观原因）。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>抗日战争</span><span class="tag">核心清单</span></h4>
+        <div class="ans">抗日民族统一战线的策略总方针是<span class="key">发展进步势力、争取中间势力、孤立顽固势力</span>；正面战场与敌后战场分别承担不同作战任务、相互配合，中国共产党领导的<strong>敌后战场</strong>逐渐成为抗击日本侵略者的<span class="key">中坚力量</span>；抗日战争的胜利是近代以来中国人民反抗外敌入侵<span class="key">第一次取得完全胜利的民族解放战争</span>，是中华民族<strong>由衰败走向振兴的重大转折点</strong>；中国共产党的中流砥柱作用体现在<strong>率先高举武装抗日的旗帜、倡导并维护抗日民族统一战线、提出全面抗战路线和持久战的战略总方针、开辟广大敌后战场等</strong></div>
+        <p class="tip">易错点：进步势力指工人、农民和城市小资产阶级；中间势力指民族资产阶级、开明绅士和地方实力派；顽固势力指大地主大资产阶级的抗日派（以蒋介石集团为代表，对其采取又联合又斗争的政策，坚持有理、有利、有节原则）。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>解放战争与建国</span><span class="tag">核心清单</span></h4>
+        <div class="ans">三大战役后，毛泽东提出「<span class="key">将革命进行到底</span>」；《中国土地法大纲》<span class="key">废除封建性及半封建性剥削的土地制度，实行耕者有其田的土地制度</span>；七届二中全会提出<span class="key">由农业国转变为工业国、由新民主主义社会转变为社会主义社会</span>的「两个转变」；《论人民民主专政》指出人民民主专政的国家政权以<span class="key">工农联盟为基础、以工人阶级为领导</span>；新中国的成立标志着近代以来中国人民<strong>争取民族独立和人民解放的任务<span class="key">基本完成</span></strong>，但<strong>实现国家繁荣富强和人民共同富裕的任务<span class="key">还未完成</span></strong></div>
+        <p class="tip">易错点：新中国成立标志第一大历史任务（民族独立、人民解放）基本完成，从而为实现第二大历史任务（国家富强、人民幸福）创造了前提。</p>
+      </article>
+
+      <article class="item core-must">
+        <h4><span>社会主义建设与改革开放</span><span class="tag">核心清单</span></h4>
+        <div class="ans">1956 年社会主义基本制度确立后，中国进入社会主义社会，这是<span class="key">中国历史上最深刻最伟大的社会变革</span>；1978 年十一届三中全会是<span class="key">新中国成立以来党的历史上具有深远意义的伟大转折</span>，它开启了改革开放和社会主义现代化建设新时期；<strong>改革开放是决定当代中国命运的关键一招，也是决定实现「两个一百年」奋斗目标、实现中华民族伟大复兴的关键一招</strong>；新时代的标志性结论：党的十八大以来，<span class="key">中国特色社会主义进入新时代</span>，我国社会主要矛盾已经转化为<span class="key">人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾</span></div>
+        <p class="tip">易错点：注意对比不同时期的社会主要矛盾（1956 中共八大、1981 十一届六中全会、2017 中共十九大）；我国社会主要矛盾的变化，没有改变我们对我国社会主义所处历史阶段的判断，我国仍处于并将长期处于社会主义初级阶段的基本国情没有变，我国是世界上最大发展中国家的国际地位没有变。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 章节四：教材高频考点精编补充（严格遵循考研标准教材表述，与核心清单互补） -->
+  <section id="sec-supp">
+    <h2 class="section-title">四、教材高频考点横向对比与精编补充<span>教材定性结论 · 易混对比</span></h2>
+
+    <div class="item-grid">
+      <article class="item">
+        <h4><span>早期反侵略的民族意识觉醒脉络</span><span class="tag">教材补充</span></h4>
+        <div class="ans">林则徐是近代中国<span class="key">睁眼看世界的第一人</span>（编成《四洲志》）；魏源编成《海国图志》，提出「<span class="key">师夷长技以制夷</span>」的思想；严复翻译《天演论》，用「物竞天择」「适者生存」敲响民族危亡警钟；孙中山在兴中会成立时喊出「<span class="key">振兴中华</span>」的时代强音。甲午战争以后的戊戌维新、辛亥革命，标志着中国人民民族意识的<span class="key">普遍觉醒</span>。</div>
+        <p class="tip">易错点：鸦片战争后只是「少数人」有朦胧的民族觉醒意识，甲午中日战争后才出现「普遍的」民族意识觉醒。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>太平天国两部纲领对比：《天朝田亩制度》vs《资政新篇》</span><span class="tag">教材补充</span></h4>
+        <div class="ans">《天朝田亩制度》是最能体现太平天国社会理想和这次农民起义特色的纲领性文件，实际上是一个<span class="key">以解决土地问题为中心的比较完整的社会改革方案</span>，从根本上否定了封建社会的基础即封建地主的土地所有制，但具有不切实际的空想性质；洪仁玕提出的《资政新篇》是中国近代历史上<span class="key">第一个比较系统的发展资本主义的方案</span>，但未能付诸实施。</div>
+        <p class="tip">易错点：《天朝田亩制度》否定封建土地所有制（农业社会主义空想）；《资政新篇》主张发展资本主义（不是农民革命实践的产物）。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>近代两次重要思想论战对比：维新与守旧 vs 革命与改良</span><span class="tag">教材补充</span></h4>
+        <div class="ans"><strong>维新派与守旧派的论战</strong>（围绕要不要变法、要不要兴民权设议院实行君主立宪、要不要废八股改科举和兴西学）：是资产阶级思想与封建主义思想在<span class="key">中国近代第一次正面交锋</span>；<strong>革命派与改良派的论战</strong>（围绕要不要以革命手段推翻清王朝【焦点】、要不要推翻帝制实行共和、要不要进行社会革命）：划清了革命与改良的界限，传播了民主革命思想。</div>
+        <p class="tip">易错点：第一次正面交锋是「维新派与守旧派」；革命派与改良派论战的焦点是「要不要以革命手段推翻清王朝」。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>三民主义与新三民主义对比</span><span class="tag">教材补充</span></h4>
+        <div class="ans">同盟会政治纲领：「驱除鞑虏，恢复中华（<strong>民族主义</strong>），创立民国（<strong>民权主义</strong>），平均地权（<strong>民生主义</strong>）」。1924 年国民党一大对三民主义作出新解释（新三民主义）：在民族主义中突出了<span class="key">反帝的内容</span>；在民权主义中强调了民主权利应「<span class="key">为一般平民所共有</span>」；把民生主义概括为「<span class="key">平均地权</span>」和「<span class="key">节制资本</span>」（后来又提出「耕者有其田」）。新三民主义的政纲同中国共产党在民主革命阶段的纲领基本一致，因而成为<span class="key">第一次国共合作的政治基础</span>。</div>
+        <p class="tip">易错点：旧三民主义的民族主义没有明确的反帝纲领，民生主义「平均地权」并非彻底废除封建地主土地所有制。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>《中华民国临时约法》的性质与意义</span><span class="tag">教材补充</span></h4>
+        <div class="ans">1912 年 3 月临时参议院颁布的《中华民国临时约法》，是中国历史上<span class="key">第一部具有资产阶级共和国宪法性质的法典</span>。它规定中华民国之主权属于国民全体，以根本大法的形式废除了两千年来的封建君主专制制度，确认了资产阶级共和国的政治制度。</div>
+        <p class="tip">易错点：注意其定性是「第一部具有资产阶级共和国宪法性质的法典」。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>大革命时期的经验教训与统一战线领导权</span><span class="tag">教材补充</span></h4>
+        <div class="ans">1925 年五卅运动掀起了全国范围的大革命高潮；北伐战争直接打击目标是帝国主义支持的北洋军阀（吴佩孚、孙传芳、张作霖）。大革命失败的主观原因是陈独秀右倾机会主义错误，放弃了<span class="key">党对统一战线特别是对革命武装的领导权</span>。中国共产党人在大革命中初步提出了无产阶级领导的新民主主义革命的基本思想。</div>
+        <p class="tip">易错点：中共四大（1925）中心议题是讨论党如何领导即将到来的革命高潮，第一次明确提出了「无产阶级在民主革命中的领导权」和「工农联盟」问题。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>农村包围城市、武装夺取政权道路及毛泽东经典著作</span><span class="tag">教材补充</span></h4>
+        <div class="ans">《中国的红色政权为什么能够存在？》和《井冈山的斗争》论证了红色政权发生、发展的原因和条件，提出了「<span class="key">工农武装割据</span>」的思想；《<span class="key">星星之火，可以燎原</span>》回答了「红旗到底打得多久」的疑问，初步形成了以乡村为中心、先在农村发展然后夺取城市的思想；《<span class="key">反对本本主义</span>》阐明了坚持辩证唯物主义的思想路线即坚持理论与实际相结合的原则，提出了「<span class="key">没有调查，没有发言权</span>」的著名论断。</div>
+        <p class="tip">易错点：三湾改编（1927.9）是建设无产阶级领导的新型人民军队的重要开端（支部建在连上）；古田会议（1929.12）确立了「思想建党、政治建军」原则。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>中国共产党不同历史时期的土地政策演变（必考对比）</span><span class="tag">教材补充</span></h4>
+        <div class="ans">1. <strong>土地革命战争时期</strong>：《井冈山土地法》（第一个土地法，没收一切土地）→《兴国土地法》（改为<span class="key">没收一切公共土地及地主阶级的土地</span>）；依靠贫农、雇农，联合中农，限制富农，保护中小工商业者，消灭地主阶级。<br>2. <strong>全民族抗日战争时期</strong>：<span class="key">减租减息</span>（地主减租减息，农民交租交息），团结一切可以团结的力量抗日。<br>3. <strong>解放战争时期</strong>：1946《五四指示》由减租减息转变为「耕者有其田」；1947《中国土地法大纲》明确规定<span class="key">废除封建性及半封建性剥削的土地制度，实行耕者有其田的土地制度</span>。<br>4. <strong>新中国成立初期</strong>：1950《中华人民共和国土地改革法》，由解放战争时期征收富农多余土地财产改为<span class="key">保存富农经济</span>。</div>
+        <p class="tip">易错点：抗战时期是「减租减息」（不没收地主土地）；解放战争时期是「废除封建性及半封建性剥削的土地制度」；建国初期土改对待富农由「征收多余」改为「保存富农经济」。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>毛泽东《论持久战》与延安整风运动</span><span class="tag">教材补充</span></h4>
+        <div class="ans">《论持久战》系统阐明了持久抗战的总方针，批驳了「亡国论」和「速胜论」，科学预测了抗日战争将经过<span class="key">战略防御、战略相持、战略反攻</span>三个阶段，其中<span class="key">战略相持阶段是中国抗日战争取得最后胜利的最关键的阶段</span>。<br><strong>延安整风运动</strong>的主要内容：反对主观主义以整顿学风、反对宗派主义以整顿党风、反对党八股以整顿文风，其中<span class="key">反对主观主义是整风运动最主要的任务</span>（主观主义的主要表现形式是教条主义和经验主义，重点是反对教条主义）。</div>
+        <p class="tip">易错点：六届六中全会（1938）毛泽东首次明确提出「马克思主义的中国化」命题；六届七中全会（1945）通过《关于若干历史问题的决议》，标志着整风运动胜利结束。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>新民主主义社会性质与三大改造经验</span><span class="tag">教材补充</span></h4>
+        <div class="ans">从 1949 年中华人民共和国成立到 1956 年社会主义改造基本完成，我国社会的性质是<span class="key">新民主主义社会</span>（属于社会主义体系的过渡性质社会），存在着五种经济成分（社会主义性质的国营经济、半社会主义性质的合作社经济、农民和手工业者的个体经济、私人资本主义经济和国家资本主义经济）。<br>农业社会主义改造遵循<span class="key">自愿互利、典型示范和国家帮助</span>的原则，经历了互助组（社会主义萌芽）、初级社（半社会主义）、高级社（完全社会主义）三个阶段；对资本主义工商业采取<span class="key">和平赎买</span>的方法，经历了初级形式的国家资本主义到高级形式的国家资本主义（全行业公私合营）。</div>
+        <p class="tip">易错点：新民主主义社会中，主要的经济成分是三种：社会主义经济、个体经济和资本主义经济。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>社会主义建设初步探索的重要理论成果（1956—1957）</span><span class="tag">教材补充</span></h4>
+        <div class="ans">1. <strong>《论十大关系》（1956.4）</strong>：以苏为鉴，独立自主探索适合中国情况的社会主义建设道路的开篇之作，围绕一个基本方针——<span class="key">调动一切积极因素为社会主义事业服务</span>。<br>2. <strong>中共八大（1956.9）</strong>：正确分析社会主义改造完成后国内主要矛盾是人民对于经济文化迅速发展的需要同当前经济文化不能满足人民需要的状况之间的矛盾，确立了<span class="key">既反保守又反冒进、在综合平衡中稳步前进</span>的经济建设方针。<br>3. <strong>《关于正确处理人民内部矛盾的问题》（1957.2）</strong>：提出把正确处理人民内部矛盾作为国家政治生活的主题。</div>
+        <p class="tip">易错点：《论十大关系》是以毛泽东为主要代表的中国共产党人开始探索中国自己的社会主义建设道路的标志。</p>
+      </article>
+
+      <article class="item">
+        <h4><span>党的历史上三个《历史决议》横向对比</span><span class="tag">教材补充</span></h4>
+        <div class="ans">1. <strong>1945 年六届七中全会</strong>：《关于若干历史问题的决议》，总结建党以来特别是六届四中全会至遵义会议前这一段党的历史及其基本经验教训，高度评价毛泽东运用马克思列宁主义解决中国革命问题的杰出贡献。<br>2. <strong>1981 年十一届六中全会</strong>：《关于建国以来党的若干历史问题的决议》，科学评价毛泽东和毛泽东思想的历史地位（毛泽东的功绩是第一位的，错误是第二位的），标志着党在<span class="key">指导思想上拨乱反正的胜利完成</span>。<br>3. <strong>2021 年十九届六中全会</strong>：《中共中央关于党的百年奋斗重大成就和历史经验的决议》，提出「<span class="key">两个确立</span>」，总结「十个明确」与百年奋斗「十个坚持」历史经验。</div>
+        <p class="tip">易错点：注意区分「揭开拨乱反正序幕」是 1978 年真理标准问题大讨论与十一届三中全会，「指导思想上拨乱反正胜利完成」是 1981 年十一届六中全会。</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<script>
+(function() {
+  var searchInput = document.getElementById('searchInput');
+  var quizBtn = document.getElementById('quizBtn');
+  var countStatus = document.getElementById('countStatus');
+  var items = document.querySelectorAll('article.item');
+  var maskCells = document.querySelectorAll('td.mask-cell');
+  var isQuizMode = false;
+
+  function updateCount() {
+    var total = items.length;
+    var visible = 0;
+    for (var i = 0; i < total; i++) {
+      if (!items[i].classList.contains('hidden')) {
+        visible++;
+      }
+    }
+    var kw = searchInput.value.trim();
+    if (!kw) {
+      countStatus.textContent = '当前共收录 ' + total + ' 条核心与高频考点条目（点击顶部开关可进行遮挡自测）';
+    } else {
+      countStatus.textContent = '搜索「' + kw + '」：匹配 ' + visible + ' / ' + total + ' 条目';
+    }
+  }
+
+  // 搜索实时过滤
+  searchInput.addEventListener('input', function() {
+    var query = searchInput.value.trim().toLowerCase();
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (!query) {
+        item.classList.remove('hidden');
+      } else {
+        var text = item.textContent.toLowerCase();
+        if (text.indexOf(query) !== -1) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      }
+    }
+    updateCount();
+  });
+
+  // 遮挡自测开关
+  quizBtn.addEventListener('click', function() {
+    isQuizMode = !isQuizMode;
+    if (isQuizMode) {
+      document.body.classList.add('quiz-mode');
+      quizBtn.classList.add('active');
+      quizBtn.textContent = '退出自测（恢复全展开）';
+    } else {
+      document.body.classList.remove('quiz-mode');
+      quizBtn.classList.remove('active');
+      quizBtn.textContent = '开启遮挡自测';
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.remove('revealed');
+      }
+      for (var j = 0; j < maskCells.length; j++) {
+        maskCells[j].classList.remove('revealed-cell');
+      }
+    }
+  });
+
+  // 自测模式下点击单条 item 展开/收起
+  for (var i = 0; i < items.length; i++) {
+    items[i].addEventListener('click', function() {
+      if (!isQuizMode) return;
+      this.classList.toggle('revealed');
+    });
+  }
+
+  // 自测模式下点击表格遮挡单元格展开/收起
+  for (var j = 0; j < maskCells.length; j++) {
+    maskCells[j].addEventListener('click', function() {
+      if (!isQuizMode) return;
+      this.classList.toggle('revealed-cell');
+    });
+  }
+
+  updateCount();
+})();
+</script>
+<style id="quizfix-style">
+/* QUIZFIX: 遮挡自测 v2 —— 只遮答案段，题干/框架保持可见（覆盖各页旧的全遮规则）
+   兼容两种模式类名： quiz-mode / test-mode ；展开类名： revealed / expanded */
+body.quiz-mode .item .ans, body.quiz-mode .item .tip,
+body.quiz-mode .item:not(.revealed) .ans, body.quiz-mode .item:not(.revealed) .tip,
+body.quiz-mode .item .ans *, body.quiz-mode .item .tip *,
+body.test-mode .item .ans, body.test-mode .item .tip,
+body.test-mode .item:not(.revealed) .ans, body.test-mode .item:not(.revealed) .tip,
+body.test-mode .item:not(.expanded) .ans, body.test-mode .item:not(.expanded) .tip,
+body.test-mode .item .ans *, body.test-mode .item .tip * {
+  color: inherit !important;
+  background-color: transparent !important;
+  filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: none !important;
+}
+body.quiz-mode .item:not(.revealed) .msk,
+body.test-mode .item:not(.revealed):not(.expanded) .msk {
+  color: transparent !important;
+  background-color: #DCD4BF !important;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #C7BC9E;
+  filter: none !important;
+  user-select: none;
+}
+body.quiz-mode .item:not(.revealed) .msk *,
+body.test-mode .item:not(.revealed):not(.expanded) .msk * {
+  color: transparent !important;
+  background-color: transparent !important;
+}
+</style>
+<script>
+/* QUIZFIX-JS: 把答案段标成 .msk —— ①已有高亮标记（k/hl/num/key/err/mono/quiz-cell）
+   ②公式行按分隔符切分，遮 =、~、⇒、⇔ 之后的结果段 ③对比表遮首列以外的数据格 */
+(function () {
+  function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  ready(function () {
+    var HL = ['k', 'hl', 'num', 'key', 'err', 'mono', 'quiz-cell', 'formula', 'red', 'code', 'code-inline', 'highlight-red', 'key-red'];
+    document.querySelectorAll('.item').forEach(function (item) {
+      var sel = HL.map(function (c) { return '.ans .' + c + ', .tip .' + c; }).join(', ');
+      item.querySelectorAll(sel).forEach(function (sp) { sp.classList.add('msk'); });
+      var ans = item.querySelector('.ans');
+      if (ans) {
+        var walker = document.createTreeWalker(ans, NodeFilter.SHOW_TEXT, {
+          acceptNode: function (node) {
+            if (!node.nodeValue || !/[~=]|⇒|⇔/.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+            var p = node.parentElement;
+            if (!p || p.closest('.msk') || p.closest('sup') || p.closest('sub')) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function (node) {
+          var frag = document.createDocumentFragment();
+          node.nodeValue.split(/(；|;)/).forEach(function (seg, idx) {
+            if (idx % 2 === 1) { frag.appendChild(document.createTextNode(seg)); return; }
+            var m = seg.match(/^([\s\S]*?[~=⇒⇔]\s*)([\s\S]+)$/);
+            if (m && m[2].replace(/[\s。．.]+$/, '').length > 0) {
+              frag.appendChild(document.createTextNode(m[1]));
+              var s = document.createElement('span');
+              s.className = 'msk';
+              s.textContent = m[2];
+              frag.appendChild(s);
+            } else {
+              frag.appendChild(document.createTextNode(seg));
+            }
+          });
+          node.parentNode.replaceChild(frag, node);
+        });
+      }
+      item.querySelectorAll('table').forEach(function (tb) {
+        tb.querySelectorAll('tr').forEach(function (tr) {
+          tr.querySelectorAll('td').forEach(function (td, ci) {
+            if (ci === 0 || td.querySelector('.msk')) return;
+            var s = document.createElement('span');
+            s.className = 'msk';
+            while (td.firstChild) s.appendChild(td.firstChild);
+            td.appendChild(s);
+          });
+        });
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

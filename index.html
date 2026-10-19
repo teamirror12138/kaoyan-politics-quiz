@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考研政治刷题 · 开源免费</title>
+<style>
+  :root{
+    --bg:#F7F5F0; --card:#FFFFFF; --ink:#1F2430; --sub:#6B7280;
+    --red:#C0392B; --red-soft:#FDECEA; --green:#1E8449; --green-soft:#E8F6EE;
+    --line:#E3E0D8; --chip:#EFECE4;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+    font-size:16px; line-height:1.65}
+  .wrap{max-width:720px; margin:0 auto; padding:16px 14px 60px}
+  header{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 2px 4px}
+  h1{font-size:22px; margin:0; letter-spacing:.5px}
+  h1 .dot{color:var(--red)}
+  .hbtns{display:flex; gap:8px}
+  button{font:inherit; cursor:pointer; border:1px solid var(--line); background:var(--card);
+    border-radius:10px; padding:8px 14px; color:var(--ink)}
+  button:active{transform:scale(.98)}
+  .btn-main{background:var(--red); border-color:var(--red); color:#fff; font-weight:600}
+  .btn-ghost{background:var(--card)}
+  .stats{display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 4px}
+  .stat{flex:1; min-width:100px; background:var(--card); border:1px solid var(--line);
+    border-radius:12px; padding:10px 12px; text-align:center}
+  .stat b{display:block; font-size:20px}
+  .stat span{font-size:12px; color:var(--sub)}
+  .banner{background:#FFF7E6; border:1px solid #F0D9A8; color:#7A5A12; border-radius:12px;
+    padding:10px 12px; font-size:14px; margin:12px 0 0}
+  .chips{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 10px}
+  .chip{background:var(--chip); border:1px solid transparent; border-radius:999px; padding:6px 14px; font-size:14px}
+  .chip.on{background:var(--ink); color:#fff}
+  .modes{display:flex; gap:8px; margin:4px 0 14px}
+  .modes button{flex:1; padding:10px}
+  .modes button.on{background:var(--red); border-color:var(--red); color:#fff; font-weight:600}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 16px}
+  .qmeta{display:flex; align-items:center; gap:8px; color:var(--sub); font-size:13px; margin-bottom:8px}
+  .badge{border-radius:6px; padding:1px 8px; font-size:12px; font-weight:700}
+  .badge.single{background:#EAF1FE; color:#2050A0}
+  .badge.multi{background:#F3EAFE; color:#6C2BD9}
+  .bar{height:6px; background:var(--chip); border-radius:99px; overflow:hidden; margin:10px 0 16px}
+  .bar i{display:block; height:100%; background:var(--red); border-radius:99px; transition:width .25s}
+  .stem{font-size:17px; font-weight:600; margin:0 0 14px}
+  .opt{display:flex; gap:10px; align-items:flex-start; width:100%; text-align:left;
+    border:1.5px solid var(--line); border-radius:12px; background:#fff; padding:12px; margin:0 0 10px; font-size:16px}
+  .opt .k{flex:0 0 auto; width:26px; height:26px; border-radius:50%; border:1.5px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px}
+  .opt.sel{border-color:var(--red); background:var(--red-soft)}
+  .opt.sel .k{background:var(--red); border-color:var(--red); color:#fff}
+  .opt.right{border-color:var(--green); background:var(--green-soft)}
+  .opt.right .k{background:var(--green); border-color:var(--green); color:#fff}
+  .opt.wrong{border-color:var(--red); background:var(--red-soft)}
+  .opt.wrong .k{background:var(--red); border-color:var(--red); color:#fff}
+  .opt.dim{opacity:.75}
+  .feedback{border-radius:12px; padding:12px 14px; margin:6px 0 12px; font-size:15px; display:none}
+  .feedback.ok{display:block; background:var(--green-soft); border:1px solid #BFE6CE}
+  .feedback.no{display:block; background:var(--red-soft); border:1px solid #F3C1BA}
+  .feedback .ans{font-weight:700}
+  .feedback .exp{color:#374151; margin-top:6px; white-space:pre-wrap}
+  .actions{display:flex; gap:8px; margin-top:6px}
+  .actions button{flex:1; padding:12px}
+  .empty{color:var(--sub); text-align:center; padding:34px 10px}
+  .matlist a{display:flex; justify-content:space-between; align-items:center; text-decoration:none;
+    color:var(--ink); background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; margin:0 0 10px; font-weight:600}
+  .matlist a span{color:var(--sub); font-weight:400; font-size:13px}
+  .foot{color:var(--sub); font-size:12px; text-align:center; margin-top:26px; line-height:1.9}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>考研政治<span class="dot">刷题</span></h1>
+    <div class="hbtns">
+      <button class="btn-ghost" id="btnImport">导入题库</button>
+      <button class="btn-ghost" id="btnMat">速查材料</button>
+      <input type="file" id="fileIn" accept=".json,application/json" class="hidden">
+    </div>
+  </header>
+
+  <div id="viewQuiz">
+    <div class="stats">
+      <div class="stat"><b id="stTotal">0</b><span>题目总数</span></div>
+      <div class="stat"><b id="stDone">0</b><span>已做</span></div>
+      <div class="stat"><b id="stRate">—</b><span>正确率</span></div>
+      <div class="stat"><b id="stWrong">0</b><span>错题</span></div>
+    </div>
+    <div class="banner hidden" id="sampleBanner">
+      现在是<b>示例题模式</b>（仓库只自带 6 道示例题）。点右上角「导入题库」，
+      选你自己按格式整理的 <b>questions.json</b>，就能刷你自己的全库。格式看仓库 README。
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="modes">
+      <button id="modeAll" class="on">顺序刷题</button>
+      <button id="modeWrong">只刷错题</button>
+    </div>
+    <div class="card" id="qcard"></div>
+  </div>
+
+  <div id="viewMat" class="hidden">
+    <p style="color:var(--sub);font-size:14px;margin:14px 0 10px">
+      都是按考纲整理的稳定内容（不含时政），点开就能看，带遮挡自测：
+    </p>
+    <div class="matlist">
+      <a href="materials/政治速查-马原.html">马原速查 <span>哲学 + 政经要点</span></a>
+      <a href="materials/政治速查-毛中特.html">毛中特速查 <span>理论成果主线</span></a>
+      <a href="materials/政治速查-史纲.html">史纲速查 <span>时间线 + 事件</span></a>
+      <a href="materials/政治速查-思修法基.html">思修法基速查 <span>高频概念</span></a>
+      <a href="materials/政治速查-帽子题对照.html">帽子题对照表 <span>引文归原理 · 58 条</span></a>
+    </div>
+    <button class="btn-main" id="btnBack" style="width:100%;padding:12px">返回刷题</button>
+  </div>
+
+  <p class="foot">
+    开源免费 · 无广告 · 不用注册 · 进度只存在你自己的浏览器里<br>
+    本仓库不含任何题库数据；题目版权归原作者，请用你自己合法取得的题自备导入。
+  </p>
+</div>
+
+<script>
+/* ============ 示例题（仓库自带，仅 6 道，用于演示与格式参照） ============ */
+const SAMPLE = [
+  {"id":"s1","cat":"示例·马原 单选","stem":"物质的唯一特性是（ ）","options":["客观实在性","可知性","运动性","可复制性"],"answer":0,"explanation":"物质的唯一特性是客观实在性。运动是物质的存在方式，可知性讲的是意识能否正确反映物质，二者都不是「唯一特性」。"},
+  {"id":"s2","cat":"示例·马原 多选","stem":"实践的基本形式包括（ ）","options":["物质生产实践","社会政治实践","科学文化实践","主观精神活动"],"answer":[0,1,2],"explanation":"实践的三种基本形式：物质生产实践、社会政治实践、科学文化实践。主观精神活动不是实践，实践是客观的物质性活动。"},
+  {"id":"s3","cat":"示例·史纲 单选","stem":"五四运动的直接导火索是（ ）","options":["巴黎和会上中国外交失败","袁世凯接受「二十一条」","新文化运动的兴起","俄国十月革命的胜利"],"answer":0,"explanation":"1919 年巴黎和会将德国在山东的权益转给日本，中国外交失败，消息传到国内直接引发五四运动。"},
+  {"id":"s4","cat":"示例·毛中特 单选","stem":"首次系统阐述社会主义初级阶段理论的会议是（ ）","options":["党的十一届三中全会","党的十二大","党的十三大","党的十四大"],"answer":2,"explanation":"1987 年党的十三大首次系统阐述了社会主义初级阶段理论，并概括了党在初级阶段的基本路线。"},
+  {"id":"s5","cat":"示例·新思想 单选","stem":"新发展理念中居于首要地位的是（ ）","options":["协调发展","绿色发展","创新发展","共享发展"],"answer":2,"explanation":"创新是引领发展的第一动力，在新发展理念中居于首要地位；协调是持续健康发展的内在要求，绿色是普遍形态，开放是必由之路，共享是根本目的。"},
+  {"id":"s6","cat":"示例·思法 单选","stem":"评价人生价值的根本尺度是（ ）","options":["个人获得荣誉的多少","个人收入的高低","人生活动是否促进历史进步","社会知名度的大小"],"answer":2,"explanation":"评价人生价值的根本尺度，是看一个人的人生活动是否符合社会发展的客观规律、是否促进了历史的进步。"}
+];
+
+/* ============ 数据与状态 ============ */
+let BANK = [], bankName = '示例题', isSample = true;
+let progress = load('kpq-progress-v1', {done:{}, wrong:[]});
+let session  = load('kpq-session-v1', {cat:'全部', mode:'all', idx:0});
+let queue = [], picked = new Set(), submitted = false;
+
+function load(k, dft){ try{ const v = JSON.parse(localStorage.getItem(k)); return v ?? dft; }catch(e){ return dft; } }
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+const $ = id => document.getElementById(id);
+const isMulti = q => Array.isArray(q.answer);
+const subjectOf = cat => { const m = String(cat||'').split('·')[1] || String(cat||'题库'); return m.replace(/\s*(单选|多选)\s*$/,'').trim() || '题库'; };
+
+function setBank(list, name, sample){
+  BANK = list.filter(q => q && q.stem && Array.isArray(q.options) && q.options.length >= 2 && q.answer !== undefined);
+  bankName = name; isSample = !!sample;
+  $('sampleBanner').classList.toggle('hidden', !isSample);
+  buildChips(); rebuildQueue(true); renderStats();
+}
+
+function subjects(){
+  const s = ['全部']; BANK.forEach(q => { const x = subjectOf(q.cat); if(!s.includes(x)) s.push(x); }); return s;
+}
+function buildChips(){
+  $('chips').innerHTML = subjects().map(s =>
+    `<button class="chip ${s===session.cat?'on':''}" data-cat="${s}">${s}</button>`).join('');
+  $('chips').querySelectorAll('.chip').forEach(c => c.onclick = () => {
+    session.cat = c.dataset.cat; session.idx = 0; save('kpq-session-v1', session);
+    buildChips(); rebuildQueue(true);
+  });
+}
+function rebuildQueue(reset){
+  let list = BANK.filter(q => session.cat === '全部' || subjectOf(q.cat) === session.cat);
+  if(session.mode === 'wrong') list = list.filter(q => progress.wrong.includes(q.id));
+  queue = list;
+  if(reset) session.idx = 0;
+  if(session.idx >= queue.length) session.idx = Math.max(0, queue.length - 1);
+  save('kpq-session-v1', session);
+  picked = new Set(); submitted = false;
+  renderQuestion(); renderStats();
+}
+function renderStats(){
+  const doneN = Object.keys(progress.done).length;
+  const corN = Object.values(progress.done).filter(d => d.correct).length;
+  $('stTotal').textContent = BANK.length;
+  $('stDone').textContent = doneN;
+  $('stRate').textContent = doneN ? Math.round(corN / doneN * 100) + '%' : '—';
+  $('stWrong').textContent = progress.wrong.length;
+}
+function sameSet(a, b){ if(a.length !== b.length) return false; const s = new Set(b); return a.every(x => s.has(x)); }
+
+function renderQuestion(){
+  const card = $('qcard');
+  if(!queue.length){
+    card.innerHTML = `<div class="empty">${session.mode === 'wrong' ? '这个范围里暂时没有错题，继续保持。' : '这个分类下还没有题目。'}<br><br>
+      <button class="btn-main" onclick="resetProgress()">清空进度重新开始</button></div>`;
+    return;
+  }
+  const q = queue[session.idx], multi = isMulti(q);
+  const prev = progress.done[q.id];
+  const pct = Math.round((session.idx + 1) / queue.length * 100);
+  card.innerHTML = `
+    <div class="qmeta"><span>${bankName}</span><span>·</span><span>${q.cat || ''}</span>
+      <span class="badge ${multi ? 'multi' : 'single'}">${multi ? '多选' : '单选'}</span>
+      <span style="margin-left:auto">${session.idx + 1} / ${queue.length}</span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <p class="stem">${q.stem}</p>
+    <div id="opts"></div>
+    <div class="feedback" id="fb"></div>
+    <div class="actions">
+      <button id="btnPrev" ${session.idx === 0 ? 'disabled style="opacity:.4"' : ''}>上一题</button>
+      <button id="btnSubmit" class="btn-main">提交</button>
+      <button id="btnNext">下一题</button>
+    </div>
+    <p style="color:var(--sub);font-size:13px;margin:10px 0 0">${multi ? '多选题：可多选，全部选对才得分，少选多选都算错。' : '单选题：点一个选项，再点提交。'}${prev ? '这道题你做过，上次' + (prev.correct ? '答对了。' : '答错了。') : ''}</p>`;
+  const box = $('opts');
+  q.options.forEach((op, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt'; b.innerHTML = `<span class="k">${'ABCD'[i]}</span><span>${op}</span>`;
+    b.onclick = () => {
+      if(submitted) return;
+      if(multi){ picked.has(i) ? picked.delete(i) : picked.add(i); b.classList.toggle('sel', picked.has(i)); }
+      else { picked = new Set([i]); box.querySelectorAll('.opt').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); }
+    };
+    box.appendChild(b);
+  });
+  $('btnPrev').onclick = () => { if(session.idx > 0){ session.idx--; picked = new Set(); submitted = false; save('kpq-session-v1', session); renderQuestion(); } };
+  $('btnNext').onclick = () => next();
+  $('btnSubmit').onclick = () => submit(q);
+}
+function submit(q){
+  if(submitted) return;
+  if(!picked.size){ $('fb').className = 'feedback no'; $('fb').innerHTML = '先选一个选项再提交。'; return; }
+  submitted = true;
+  const multi = isMulti(q);
+  const ansArr = multi ? q.answer.slice() : [q.answer];
+  const correct = multi ? sameSet([...picked], ansArr) : picked.has(q.answer);
+  progress.done[q.id] = {correct};
+  const wi = progress.wrong.indexOf(q.id);
+  if(!correct && wi < 0) progress.wrong.push(q.id);
+  if(correct && wi >= 0) progress.wrong.splice(wi, 1);
+  save('kpq-progress-v1', progress);
+  const opts = $('opts').children;
+  ansArr.forEach(i => opts[i] && opts[i].classList.add('right'));
+  if(!correct) picked.forEach(i => { if(!ansArr.includes(i)) opts[i] && opts[i].classList.add('wrong'); });
+  [...opts].forEach((o, i) => { if(!ansArr.includes(i) && !picked.has(i)) o.classList.add('dim'); });
+  const ansTxt = ansArr.map(i => 'ABCD'[i]).join('');
+  $('fb').className = 'feedback ' + (correct ? 'ok' : 'no');
+  $('fb').innerHTML = `<span class="ans">${correct ? '✓ 答对了' : '✗ 答错了'} · 正确答案：${ansTxt}</span>` +
+    (q.explanation ? `<div class="exp">${q.explanation}</div>` : '');
+  $('btnSubmit').textContent = '已提交';
+  renderStats();
+}
+function next(){
+  if(session.idx < queue.length - 1){ session.idx++; }
+  else if(session.mode === 'wrong'){ rebuildQueue(true); return; }
+  else { session.idx = 0; }
+  picked = new Set(); submitted = false; save('kpq-session-v1', session); renderQuestion();
+}
+function resetProgress(){
+  progress = {done:{}, wrong:[]}; save('kpq-progress-v1', progress); rebuildQueue(true);
+}
+window.resetProgress = resetProgress;
+
+/* ============ 视图切换与导入 ============ */
+$('btnMat').onclick = () => { $('viewQuiz').classList.add('hidden'); $('viewMat').classList.remove('hidden'); };
+$('btnBack').onclick = () => { $('viewMat').classList.add('hidden'); $('viewQuiz').classList.remove('hidden'); };
+$('modeAll').onclick = () => { session.mode = 'all'; $('modeAll').classList.add('on'); $('modeWrong').classList.remove('on'); rebuildQueue(true); };
+$('modeWrong').onclick = () => { session.mode = 'wrong'; $('modeWrong').classList.add('on'); $('modeAll').classList.remove('on'); rebuildQueue(true); };
+$('btnImport').onclick = () => $('fileIn').click();
+$('fileIn').onchange = e => {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const data = JSON.parse(r.result);
+      const list = Array.isArray(data) ? data : data.questions;
+      if(!Array.isArray(list) || !list.length) throw new Error('empty');
+      list.forEach((q, i) => { if(!q.id) q.id = 'q' + i; });
+      setBank(list, f.name.replace(/\.json$/i, ''), false);
+    }catch(err){ alert('这个文件读不了：需要是符合格式的 JSON 题库文件（格式见仓库 README）。'); }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+};
+
+/* ============ 启动：优先同目录 questions.json，没有就用示例题 ============ */
+(async () => {
+  try{
+    const res = await fetch('questions.json', {cache:'no-store'});
+    if(res.ok){
+      const data = await res.json();
+      const list = Array.isArray(data) ? data : data.questions;
+      if(Array.isArray(list) && list.length){ list.forEach((q, i) => { if(!q.id) q.id = 'q' + i; }); setBank(list, '我的题库', false); return; }
+    }
+    throw new Error('no bank');
+  }catch(e){ setBank(SAMPLE.slice(), '示例题', true); }
+})();
+</script>
+</body>
+</html>

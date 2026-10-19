@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>政治速查 · 毛泽东思想和中国特色社会主义理论体系</title>
+<style>
+  :root {
+    --bg: #F2EFE9;
+    --paper: #FAF8F4;
+    --green: #1B4D3E;
+    --green-soft: #E5ECE9;
+    --red: #D9381E;
+    --red-soft: #FBECE9;
+    --text: #1F1F1D;
+    --muted: #5A5955;
+    --border: #D6D1C7;
+    --mask-bg: #DFDBD2;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: "Songti SC", "Noto Serif SC", "STSong", "SimSun", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", serif;
+    font-size: 15px;
+    line-height: 1.65;
+    padding-bottom: 48px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header.top-header {
+    background-color: var(--bg);
+    border-bottom: 2px solid var(--green);
+    padding: 18px 20px 12px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .header-meta {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  header.top-header h1 {
+    font-size: 23px;
+    color: var(--green);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
+
+  header.top-header .sub {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(242, 239, 233, 0.96);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+
+  .toolbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .controls-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    flex: 1 1 320px;
+  }
+
+  .search-input {
+    flex: 1 1 200px;
+    max-width: 320px;
+    padding: 6px 11px;
+    font-size: 14px;
+    border: 1px solid var(--green);
+    background-color: var(--paper);
+    color: var(--text);
+    border-radius: 2px;
+    outline: none;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  .search-input:focus {
+    box-shadow: 0 0 0 2px rgba(27, 77, 62, 0.2);
+  }
+
+  .btn-toggle {
+    padding: 6px 13px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+    background-color: var(--paper);
+    border: 1px solid var(--green);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    transition: background-color 0.15s, color 0.15s;
+    user-select: none;
+  }
+
+  .btn-toggle:hover {
+    background-color: var(--green-soft);
+  }
+
+  .btn-toggle.active {
+    background-color: var(--green);
+    color: var(--paper);
+  }
+
+  .status-count {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .anchor-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  .anchor-nav a {
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--green);
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    background-color: var(--paper);
+    border-radius: 2px;
+    font-weight: 600;
+  }
+
+  .anchor-nav a:hover {
+    border-color: var(--green);
+    background-color: var(--green-soft);
+  }
+
+  main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 16px 20px;
+  }
+
+  section {
+    margin-bottom: 28px;
+    scroll-margin-top: 72px;
+  }
+
+  .sec-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--green);
+    padding-bottom: 5px;
+    margin-bottom: 12px;
+  }
+
+  .sec-header h2 {
+    font-size: 18px;
+    color: var(--green);
+    font-weight: 800;
+    letter-spacing: 0.03em;
+  }
+
+  .sec-header .sec-tag {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* 理论成果对比总表 */
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    background-color: var(--paper);
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 660px;
+  }
+
+  table.comp-table th,
+  table.comp-table td {
+    border: 1px solid var(--border);
+    padding: 9px 11px;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  table.comp-table th {
+    background-color: var(--green);
+    color: #FAF8F4;
+    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    letter-spacing: 0.03em;
+  }
+
+  table.comp-table td.col-theory {
+    width: 19%;
+    font-weight: 800;
+    color: var(--green);
+    background-color: var(--green-soft);
+  }
+
+  table.comp-table td.col-theme {
+    width: 44%;
+  }
+
+  table.comp-table td.col-status {
+    width: 37%;
+  }
+
+  /* 条目网格排版 */
+  .items-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  article.item {
+    background-color: var(--paper);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--green);
+    padding: 11px 14px;
+    transition: border-color 0.15s;
+  }
+
+  article.item.hidden-by-filter {
+    display: none;
+  }
+
+  article.item h4 {
+    font-size: 15.5px;
+    font-weight: 800;
+    color: var(--green);
+    margin-bottom: 6px;
+    line-height: 1.4;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  article.item h4::after {
+    content: "";
+    display: none;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  article.item .ans {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.68;
+    text-align: justify;
+  }
+
+  article.item .ans strong {
+    font-weight: 700;
+    color: #000;
+  }
+
+  .key-red {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  article.item p.tip {
+    margin-top: 7px;
+    padding: 5px 9px;
+    background-color: var(--red-soft);
+    border-left: 3px solid var(--red);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  article.item p.tip:empty {
+    display: none;
+  }
+
+  article.item p.tip strong {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  /* 遮挡自测模式 */
+  body.quiz-mode article.item {
+    cursor: pointer;
+  }
+
+  body.quiz-mode article.item h4::after {
+    display: inline;
+    content: "[点击展开自测]";
+  }
+
+  body.quiz-mode article.item.revealed h4::after {
+    content: "[点击收起]";
+    color: var(--green);
+  }
+
+  body.quiz-mode article.item:not(.revealed) .ans,
+  body.quiz-mode article.item:not(.revealed) .tip {
+    background-color: var(--mask-bg);
+    color: transparent;
+    border-color: var(--border);
+    user-select: none;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  body.quiz-mode article.item:not(.revealed) .ans *,
+  body.quiz-mode article.item:not(.revealed) .tip * {
+    color: transparent !important;
+    background: transparent !important;
+  }
+
+  body.quiz-mode .comp-table td.col-theme,
+  body.quiz-mode .comp-table td.col-status {
+    cursor: pointer;
+  }
+
+  body.quiz-mode .comp-table tr:not(.row-revealed) td.col-theme,
+  body.quiz-mode .comp-table tr:not(.row-revealed) td.col-status {
+    background-color: var(--mask-bg);
+    color: transparent;
+    user-select: none;
+  }
+
+  body.quiz-mode .comp-table tr:not(.row-revealed) td.col-theme *,
+  body.quiz-mode .comp-table tr:not(.row-revealed) td.col-status * {
+    color: transparent !important;
+  }
+
+  .empty-notice {
+    display: none;
+    padding: 24px;
+    text-align: center;
+    background-color: var(--paper);
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (max-width: 640px) {
+    header.top-header {
+      padding: 14px 14px 10px;
+    }
+    header.top-header h1 {
+      font-size: 19px;
+    }
+    .toolbar {
+      padding: 8px 14px;
+    }
+    main {
+      padding: 12px 14px;
+    }
+    article.item {
+      padding: 10px 11px;
+    }
+    article.item h4 {
+      font-size: 15px;
+    }
+    article.item .ans,
+    article.item p.tip {
+      font-size: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="header-meta">中国研究生招生考试 · 思想政治理论 · 恒定考点速查刊</div>
+  <h1>政治速查 · 毛泽东思想和中国特色社会主义理论体系</h1>
+  <div class="sub">仅收录教材稳定表述（不含时政）｜朱红标注核心定性与高频设错点｜支持遮挡自测与实时检索</div>
+</header>
+
+<nav class="toolbar" aria-label="工具与章节导航">
+  <div class="toolbar-inner">
+    <div class="controls-group">
+      <input type="search" id="searchInput" class="search-input" placeholder="输入关键词过滤（如：实事求是、主力军、根本方法）" autocomplete="off">
+      <button type="button" id="quizToggleBtn" class="btn-toggle" aria-pressed="false">遮挡自测：关</button>
+      <span id="statusCount" class="status-count"></span>
+    </div>
+    <div class="anchor-nav">
+      <a href="#sec-overview">一、理论总表</a>
+      <a href="#sec-mao">二、毛泽东思想</a>
+      <a href="#sec-deng-three-sci">三、邓/三个代表/科发</a>
+      <a href="#sec-xi">四、习近平新时代中国特色社会主义思想</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- 第一部分：理论成果对比总表 -->
+  <section id="sec-overview">
+    <div class="sec-header">
+      <h2>一、理论成果对比总表（逐字对照与纲领速查）</h2>
+      <span class="sec-tag">自测模式下点击表格行亦可单行显隐</span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>理论成果</th>
+            <th>主题 / 首要基本理论问题 / 核心观点与要义</th>
+            <th>历史地位与核心定性</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-theory">毛泽东思想</td>
+            <td class="col-theme">中国革命和建设的科学指南（围绕什么是新民主主义革命、怎样进行新民主主义革命，以及怎样进行社会主义革命和建设展开）</td>
+            <td class="col-status"><span class="key-red">马克思主义中国化的第一个重大理论成果</span>；中国革命和建设的科学指南；中国共产党和中国人民宝贵的精神财富</td>
+          </tr>
+          <tr>
+            <td class="col-theory">邓小平理论</td>
+            <td class="col-theme">回答<span class="key-red">什么是社会主义、怎样建设社会主义</span></td>
+            <td class="col-status"><span class="key-red">中国特色社会主义理论体系的开篇之作</span>；马克思主义在中国发展的新阶段</td>
+          </tr>
+          <tr>
+            <td class="col-theory">「三个代表」重要思想</td>
+            <td class="col-theme">核心观点是中国共产党始终代表中国先进生产力的发展要求、代表中国先进文化的前进方向、代表中国最广大人民的根本利益；进一步回答了什么是社会主义、怎样建设社会主义，<span class="key-red">创造性地回答了建设什么样的党、怎样建设党</span></td>
+            <td class="col-status">中国特色社会主义理论体系的接续发展；加强和改进党的建设、推进我国社会主义自我完善和发展的强大理论武器</td>
+          </tr>
+          <tr>
+            <td class="col-theory">科学发展观</td>
+            <td class="col-theme">第一要义是<span class="key-red">发展</span>，核心立场是<span class="key-red">以人为本</span>，基本要求是<span class="key-red">全面协调可持续</span>，根本方法是<span class="key-red">统筹兼顾</span>（回答实现什么样的发展、怎样发展）</td>
+            <td class="col-status"><span class="key-red">马克思主义关于发展的世界观和方法论的集中体现</span>；中国特色社会主义理论体系的重要组成部分</td>
+          </tr>
+          <tr>
+            <td class="col-theory">习近平新时代中国特色社会主义思想</td>
+            <td class="col-theme">核心要义是<span class="key-red">坚持和发展中国特色社会主义</span>（回答新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义，建设什么样的社会主义现代化强国、怎样建设社会主义现代化强国，建设什么样的长期执政的马克思主义政党、怎样建设长期执政的马克思主义政党）</td>
+            <td class="col-status"><span class="key-red">当代中国马克思主义、二十一世纪马克思主义</span>；<span class="key-red">中华文化和中国精神的时代精华</span>；<span class="key-red">马克思主义中国化时代化新的飞跃</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="items-grid">
+      <article class="item">
+        <h4>理论成果总表 · 标准原文逐字核对</h4>
+        <div class="ans">
+          <strong>毛泽东思想</strong>：<span class="key-red">马克思主义中国化的第一个重大理论成果</span>；中国革命和建设的科学指南；中国共产党和中国人民宝贵的精神财富<br>
+          <strong>邓小平理论</strong>：回答<span class="key-red">什么是社会主义、怎样建设社会主义</span>；<span class="key-red">中国特色社会主义理论体系的开篇之作</span>；马克思主义在中国发展的新阶段<br>
+          <strong>「三个代表」重要思想</strong>：核心观点是中国共产党始终代表中国先进生产力的发展要求、代表中国先进文化的前进方向、代表中国最广大人民的根本利益；进一步回答了什么是社会主义、怎样建设社会主义，<span class="key-red">创造性地回答了建设什么样的党、怎样建设党</span><br>
+          <strong>科学发展观</strong>：第一要义是<span class="key-red">发展</span>，核心立场是<span class="key-red">以人为本</span>，基本要求是<span class="key-red">全面协调可持续</span>，根本方法是<span class="key-red">统筹兼顾</span>；<span class="key-red">马克思主义关于发展的世界观和方法论的集中体现</span><br>
+          <strong>习近平新时代中国特色社会主义思想</strong>：核心要义是<span class="key-red">坚持和发展中国特色社会主义</span>；<span class="key-red">当代中国马克思主义、二十一世纪马克思主义</span>；<span class="key-red">中华文化和中国精神的时代精华</span>；<span class="key-red">马克思主义中国化时代化新的飞跃</span>
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>【中国特色社会主义理论体系】包括邓小平理论、「三个代表」重要思想、科学发展观、习近平新时代中国特色社会主义思想，<strong>不包含毛泽东思想</strong>（毛泽东思想是马克思主义中国化的第一个重大理论成果，中特理论体系的开篇之作是邓小平理论）。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 第二部分：毛泽东思想 -->
+  <section id="sec-mao">
+    <div class="sec-header">
+      <h2>二、毛泽东思想（形成、新民主主义革命、社会主义改造与初步探索）</h2>
+      <span class="sec-tag">核心清单 + 经典著作与会议锚点</span>
+    </div>
+
+    <div class="items-grid">
+      <article class="item">
+        <h4>毛泽东思想的形成与发展</h4>
+        <div class="ans">
+          <strong>萌芽</strong>于党创立和国民革命时期；<strong>初步形成</strong>于<span class="key-red">土地革命战争时期</span>（农村包围城市、武装夺取政权的道路理论）；<strong>走向成熟</strong>于<span class="key-red">遵义会议以后至抗日战争时期</span>（新民主主义革命理论的系统阐述）；<strong>继续发展</strong>于解放战争时期和新中国成立以后；<span class="key-red">党的七大</span>把毛泽东思想确立为党的指导思想并写入党章
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>注意区分「初步形成」（土地革命战争时期，标志是农村包围城市、武装夺取政权道路理论的提出）与「走向成熟」（遵义会议后至抗战时期，标志是新民主主义革命理论的系统阐述）；确立为指导思想是<strong>中共七大（1945年）</strong>，切勿误选六届六中全会或八大。</p>
+      </article>
+
+      <article class="item">
+        <h4>毛泽东思想的主要内容</h4>
+        <div class="ans">
+          <strong>新民主主义革命理论</strong>、<strong>社会主义革命和社会主义建设理论</strong>、<strong>革命军队建设和军事战略理论</strong>、<strong>政策和策略理论</strong>、<strong>思想政治工作和文化工作理论</strong>、<strong>党的建设理论</strong>（另有国际战略和外交、思想方法和工作方法方面的内容）
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>毛泽东思想是党集体智慧的结晶，<strong>毛泽东的晚年错误不属于毛泽东思想的科学体系</strong>（必须把经过长期历史考验形成为科学理论的毛泽东思想，同毛泽东晚年所犯的错误严格区别开来）。</p>
+      </article>
+
+      <article class="item">
+        <h4>毛泽东思想活的灵魂</h4>
+        <div class="ans">
+          <strong>实事求是</strong>（一切从实际出发，理论联系实际，实事求是，在实践中检验真理和发展真理，是<span class="key-red">党的思想路线的核心</span>）、<strong>群众路线</strong>（一切为了群众，一切依靠群众，从群众中来，到群众中去）、<strong>独立自主</strong>（坚持独立思考，走自己的路）
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>活的灵魂是三个基本方面（实事求是、群众路线、独立自主），不要与「三大法宝」（统一战线、武装斗争、党的建设）或「三大优良作风」（理论联系实际、密切联系群众、批评与自我批评）混淆。</p>
+      </article>
+
+      <article class="item">
+        <h4>新民主主义革命总路线</h4>
+        <div class="ans">
+          <strong>无产阶级领导的，人民大众的，反对帝国主义、封建主义和官僚资本主义的革命</strong>；革命的对象首要是<span class="key-red">帝国主义</span>；动力包括无产阶级、农民阶级、城市小资产阶级和民族资产阶级，其中<span class="key-red">农民阶级是主力军</span>；领导力量是<span class="key-red">中国无产阶级</span>（通过中国共产党实现领导）；革命的性质是<span class="key-red">资产阶级民主主义革命</span>，但它是<strong>世界无产阶级社会主义革命的一部分</strong>，前途是<strong>社会主义</strong>；新民主主义社会是一个<span class="key-red">过渡性质的社会</span>
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>1. 首要对象是<strong>帝国主义</strong>，而中国革命最基本的动力是<strong>无产阶级</strong>，主力军是<strong>农民阶级</strong>，城市小资产阶级是可靠同盟者，民族资产阶级具有两面性；2. 新民主主义革命性质是<strong>资产阶级民主主义革命</strong>（看任务：反帝反封建，非社会主义革命），领导权是区分新旧民主主义革命的<strong>根本标志</strong>。</p>
+      </article>
+
+      <article class="item">
+        <h4>新民主主义革命的道路与法宝</h4>
+        <div class="ans">
+          道路是<span class="key-red">农村包围城市、武装夺取政权</span>；三大法宝是<strong>统一战线、武装斗争、党的建设</strong>（毛泽东在中国革命的三大法宝问题上指出：<span class="key-red">统一战线和武装斗争是中国革命的两个基本特点，是战胜敌人的两个基本武器</span>）；三大经济纲领：<strong>没收封建地主阶级的土地归农民所有、没收官僚资产阶级的垄断资本归新民主主义的国家所有、保护民族工商业</strong>；土地政策：抗日战争时期实行<span class="key-red">减租减息</span>，解放战争时期颁布《中国土地法大纲》实行<span class="key-red">耕者有其田</span>
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>没收官僚资本具有<strong>双重革命性质</strong>：一方面反官僚资本就是反买办资本，属于民主革命性质；另一方面没收大资本归新民主主义国家所有，又带有社会主义革命性质。</p>
+      </article>
+
+      <article class="item">
+        <h4>社会主义改造</h4>
+        <div class="ans">
+          过渡时期总路线是<span class="key-red">「一化三改」</span>——逐步实现国家的社会主义工业化，并逐步实现国家对农业、手工业和资本主义工商业的社会主义改造；农业改造遵循<strong>自愿互利、典型示范、国家帮助</strong>的原则，经<strong>互助组、初级社、高级社</strong>三个阶段；对资本主义工商业的改造采取<span class="key-red">和平赎买</span>的政策，利润分配实行<span class="key-red">「四马分肥」</span>（国家所得税、企业公积金、工人福利费、股金红利）；<strong>1956 年</strong>社会主义改造基本完成，<span class="key-red">社会主义基本制度在中国确立，中国进入社会主义社会</span>
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>1. 1949年新中国成立标志着进入<strong>新民主主义社会</strong>（过渡性质），1956年底三大改造基本完成才标志进入<strong>社会主义社会（初级阶段）</strong>；2. 农业改造三阶段：互助组（社会主义萌芽）→初级社（半社会主义性质）→高级社（完全社会主义性质）；资本主义工商业改造三阶段：初级形式国家资本主义→个别企业公私合营（半社会主义，四马分肥在此阶段）→全行业公私合营（定息）。</p>
+      </article>
+
+      <article class="item">
+        <h4>社会主义建设初步探索</h4>
+        <div class="ans">
+          <strong>《论十大关系》</strong>提出要调动党内党外、国内国外一切积极因素，探索适合中国国情的社会主义建设道路；<strong>《关于正确处理人民内部矛盾的问题》</strong>指出社会主义社会的基本矛盾仍然是<span class="key-red">生产关系和生产力之间、上层建筑和经济基础之间的矛盾</span>；两类不同性质的社会矛盾是<strong>敌我矛盾和人民内部矛盾</strong>，处理人民内部矛盾的方法是<span class="key-red">民主的方法，即「团结—批评—团结」的方法</span>；工业化道路要处理好重工业、轻工业和农业的关系，<span class="key-red">以农业为基础、工业为主导，走农、轻、重的顺序</span>
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>《论十大关系》是以毛泽东为主要代表的中国共产党人<strong>开始探索中国自己的社会主义建设道路的标志</strong>；处理敌我矛盾用<strong>专政</strong>的方法，处理人民内部矛盾用<strong>民主</strong>的方法（政治上团结—批评—团结，经济上统筹兼顾、适当安排，科学文化上百花齐放、百家争鸣）。</p>
+      </article>
+
+      <article class="item">
+        <h4>【教材补充】毛泽东经典著作与核心命题对应表</h4>
+        <div class="ans">
+          1. <strong>萌芽时期</strong>：《中国社会各阶级的分析》《湖南农民运动考察报告》（强调无产阶级领导权与农民问题的重要地位）；<br>
+          2. <strong>初步形成时期（土地革命时期）</strong>：《中国的红色政权为什么能够存在？》《井冈山的斗争》《星星之火，可以燎原》（提出「工农武装割据」思想）；<strong>《反对本本主义》</strong>（首次明确提出「<span class="key-red">没有调查，没有发言权</span>」和「中国革命斗争的胜利要靠中国同志了解中国情况」，初步界定了党的思想路线的基本含义）；<br>
+          3. <strong>成熟时期（抗战时期）</strong>：《〈共产党人〉发刊词》（系统总结<span class="key-red">三大法宝</span>，提出党的建设「伟大工程」）；《中国革命和中国共产党》（首次提出「新民主主义革命」科学概念）；《新民主主义论》（系统阐述新民主主义政治、经济、文化纲领）；《改造我们的学习》（对<span class="key-red">实事求是</span>作出科学解释）；<br>
+          4. <strong>解放战争与建国后</strong>：《在晋绥干部会议上的讲话》（完整表述新民主主义革命总路线）；《论人民民主专政》（建国理论准备）。
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>最早提出「马克思主义中国化」命题的是1938年毛泽东在<strong>党的六届六中全会</strong>上作的《论新阶段》报告；最早提出「没有调查，没有发言权」是<strong>《反对本本主义》</strong>（1930年），对「实事求是」作科学解释是<strong>《改造我们的学习》</strong>（1941年）。</p>
+      </article>
+
+      <article class="item">
+        <h4>【教材补充】新民主主义社会的五种经济成分与主要矛盾</h4>
+        <div class="ans">
+          新民主主义社会存在着五种经济成分：<strong>社会主义性质的国营经济</strong>、<strong>半社会主义性质的合作社经济</strong>、<strong>农民和手工业者的个体经济</strong>、<strong>私人资本主义经济</strong>和<strong>国家资本主义经济</strong>。其中主要的经济成分是三种：<span class="key-red">社会主义经济、个体经济和资本主义经济</span>。随着土地改革的基本完成，<span class="key-red">工人阶级和资产阶级的矛盾</span>逐步成为我国社会的主要矛盾。
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>合作社经济是<strong>个体经济向社会主义集体经济过渡</strong>的形式（半社会主义性质）；国家资本主义经济是<strong>私人资本主义经济向社会主义国营经济过渡</strong>的形式。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 第三部分：邓小平理论、「三个代表」重要思想、科学发展观 -->
+  <section id="sec-deng-three-sci">
+    <div class="sec-header">
+      <h2>三、邓小平理论、「三个代表」重要思想、科学发展观</h2>
+      <span class="sec-tag">核心清单 + 中特理论体系基础锚点</span>
+    </div>
+
+    <div class="items-grid">
+      <article class="item">
+        <h4>邓小平理论</h4>
+        <div class="ans">
+          精髓是<span class="key-red">解放思想、实事求是</span>；社会主义的本质是<span class="key-red">解放生产力，发展生产力，消灭剥削，消除两极分化，最终达到共同富裕</span>；<span class="key-red">社会主义初级阶段</span>是我国最大的实际；党在社会主义初级阶段的基本路线概括为<strong>「一个中心、两个基本点」</strong>（以经济建设为中心，坚持四项基本原则，坚持改革开放）；<strong>「三步走」战略</strong>：第一步国民生产总值比 1980 年翻一番、解决温饱，第二步再翻一番、达到小康，第三步到 21 世纪中叶基本实现现代化；改革是中国的第二次革命，是<span class="key-red">社会主义制度的自我完善和发展</span>，是社会主义社会发展的直接动力；社会主义市场经济理论的要点：<span class="key-red">计划经济和市场经济不是区分社会主义和资本主义的标志，计划和市场都是经济手段</span>；<strong>「一国两制」</strong>是实现祖国和平统一的基本方针
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>1. 「一个中心、两个基本点」中，以经济建设为中心是<strong>兴国之要</strong>，四项基本原则是<strong>立国之本</strong>，改革开放是<strong>强国之路</strong>；2. 1992年邓小平南方谈话明确了社会主义本质和市场经济理论，同年<strong>中共十四大</strong>确立了建立社会主义市场经济体制的改革目标，<strong>中共十五大</strong>把邓小平理论确立为党的指导思想。</p>
+      </article>
+
+      <article class="item">
+        <h4>「三个代表」重要思想</h4>
+        <div class="ans">
+          核心观点见总表（中国共产党始终代表中国先进生产力的发展要求、代表中国先进文化的前进方向、代表中国最广大人民的根本利益）；本质是<span class="key-red">立党为公、执政为民</span>；提出<span class="key-red">发展是党执政兴国的第一要务</span>，建立社会主义市场经济体制、建设社会主义政治文明等
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>贯彻「三个代表」重要思想，关键在<strong>坚持与时俱进</strong>，核心在<strong>坚持党的先进性</strong>，本质在<strong>坚持立党为公、执政为民</strong>。2002年<strong>中共十六大</strong>将其写入党章确立为指导思想。</p>
+      </article>
+
+      <article class="item">
+        <h4>科学发展观</h4>
+        <div class="ans">
+          见总表四要素（第一要义是<span class="key-red">发展</span>，核心立场是<span class="key-red">以人为本</span>，基本要求是<span class="key-red">全面协调可持续</span>，根本方法是<span class="key-red">统筹兼顾</span>）；坚持以人为本，就是要<span class="key-red">以实现人的全面发展为目标</span>；历史地位：<strong>中国特色社会主义理论体系的重要组成部分，同马克思列宁主义、毛泽东思想、邓小平理论、「三个代表」重要思想一脉相承又与时俱进</strong>
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>科学发展观的四要素经常在单选题中互换设错，务必精准对应：第一要义—发展、核心立场—以人为本、基本要求—全面协调可持续、根本方法—统筹兼顾。2012年<strong>中共十八大</strong>将其确立为党的指导思想。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 第四部分：习近平新时代中国特色社会主义思想 -->
+  <section id="sec-xi">
+    <div class="sec-header">
+      <h2>四、习近平新时代中国特色社会主义思想</h2>
+      <span class="sec-tag">十个明确 · 十四个坚持 · 两个确立 · 六个必须坚持 · 中国式现代化</span>
+    </div>
+
+    <div class="items-grid">
+      <article class="item">
+        <h4>习近平新时代中国特色社会主义思想的主要内容（十个明确 · 十四个坚持）</h4>
+        <div class="ans">
+          <strong>「十个明确」</strong>——<br>
+          ①中国特色社会主义最本质的特征是<span class="key-red">中国共产党领导</span>，坚持党对一切工作的领导，增强「四个意识」、坚定「四个自信」、做到「两个维护」<br>
+          ②坚持和发展中国特色社会主义，总任务是<span class="key-red">实现社会主义现代化和中华民族伟大复兴</span>，分两步走在本世纪中叶建成富强民主文明和谐美丽的社会主义现代化强国<br>
+          ③新时代我国社会主要矛盾是<span class="key-red">人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾</span>，坚持以人民为中心的发展思想<br>
+          ④中国特色社会主义事业总体布局是<strong>经济建设、政治建设、文化建设、社会建设、生态文明建设</strong><span class="key-red">五位一体</span>，战略布局是<strong>全面建设社会主义现代化国家、全面深化改革、全面依法治国、全面从严治党</strong><span class="key-red">四个全面</span><br>
+          ⑤全面深化改革总目标是<span class="key-red">完善和发展中国特色社会主义制度、推进国家治理体系和治理能力现代化</span><br>
+          ⑥全面推进依法治国总目标是<span class="key-red">建设中国特色社会主义法治体系、建设社会主义法治国家</span><br>
+          ⑦坚持和完善社会主义基本经济制度，使<span class="key-red">市场在资源配置中起决定性作用</span>，更好发挥政府作用，把握新发展阶段，贯彻<strong>创新、协调、绿色、开放、共享</strong>的新发展理念，加快构建新发展格局，推动高质量发展，统筹发展和安全<br>
+          ⑧党在新时代的强军目标是建设一支<span class="key-red">听党指挥、能打胜仗、作风优良</span>的人民军队，把人民军队建设成为世界一流军队<br>
+          ⑨中国特色大国外交要服务民族复兴、促进人类进步，推动建设<strong>新型国际关系</strong>，推动构建<strong>人类命运共同体</strong><br>
+          ⑩全面从严治党的战略方针，提出新时代党的建设总要求，全面推进党的<strong>政治建设、思想建设、组织建设、作风建设、纪律建设</strong>，把<span class="key-red">制度建设贯穿其中</span>，深入推进反腐败斗争；<br><br>
+          <strong>「十四个坚持」是基本方略</strong>：坚持党对一切工作的领导、坚持以人民为中心、坚持全面深化改革、坚持新发展理念、坚持人民当家作主、坚持全面依法治国、坚持社会主义核心价值体系、坚持在发展中保障和改善民生、坚持人与自然和谐共生、坚持总体国家安全观、坚持党对人民军队的绝对领导、坚持「一国两制」和推进祖国统一、坚持推动构建人类命运共同体、坚持全面从严治党
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>1. 「十个明确」是<strong>主体内容</strong>（支撑起理论体系的四梁八柱），「十四个坚持」是<strong>基本方略</strong>（行动纲领层面）；2. 注意区分全面深化改革总目标（两句话：完善制度+推进治理现代化）与全面依法治国总目标（法治体系+法治国家）；3. 党的建设中，<strong>政治建设是统领/根本性建设</strong>，把<strong>制度建设贯穿其中</strong>。</p>
+      </article>
+
+      <article class="item">
+        <h4>新时代补充锚点（两个确立 · 六个必须坚持 · 中国式现代化 · 两个没有变）</h4>
+        <div class="ans">
+          <strong>「两个确立」</strong>是<span class="key-red">确立习近平同志党中央的核心、全党的核心地位，确立习近平新时代中国特色社会主义思想的指导地位</span>；<br>
+          世界观和方法论是<strong>「六个必须坚持」</strong>：<span class="key-red">必须坚持人民至上、必须坚持自信自立、必须坚持守正创新、必须坚持问题导向、必须坚持系统观念、必须坚持胸怀天下</span>；<br>
+          <strong>中国式现代化的中国特色</strong>是：<span class="key-red">人口规模巨大的现代化、全体人民共同富裕的现代化、物质文明和精神文明相协调的现代化、人与自然和谐共生的现代化、走和平发展道路的现代化</span>；<br>
+          <strong>新发展理念</strong>是<span class="key-red">创新、协调、绿色、开放、共享</span>；<br>
+          我国社会主要矛盾已经转化为<strong>人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾</strong>，这是关系全局的历史性变化，但<span class="key-red">我国仍处于并将长期处于社会主义初级阶段的基本国情没有变、我国是世界最大发展中国家的国际地位没有变（两个没有变）</span>
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>1. 新发展理念中，<strong>创新</strong>注重解决发展动力问题，<strong>协调</strong>注重解决发展不平衡问题，<strong>绿色</strong>注重解决人与自然和谐问题，<strong>开放</strong>注重解决发展内外联动问题，<strong>共享</strong>注重解决社会公平正义问题；2. 主要矛盾虽然发生了转化，但<strong>社会主义初级阶段基本国情没有变</strong>，党在社会主义初级阶段的<strong>基本路线也没有变</strong>。</p>
+      </article>
+
+      <article class="item">
+        <h4>【教材补充】中国式现代化的本质要求与重大原则</h4>
+        <div class="ans">
+          <strong>中国式现代化的本质要求</strong>：坚持中国共产党领导，坚持中国特色社会主义，实现高质量发展，发展全过程人民民主，丰富人民精神世界，实现全体人民共同富裕，促进人与自然和谐共生，推动构建人类命运共同体，创造人类文明新形态。<br>
+          <strong>前进道路上必须牢牢把握的五条重大原则</strong>：<span class="key-red">坚持和加强党的全面领导</span>、坚持中国特色社会主义道路、坚持以人民为中心的发展思想、坚持深化改革开放、<span class="key-red">坚持发扬斗争精神</span>。
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>区分「五个中国特色」（人口规模巨大、全体人民共同富裕、物质精神相协调、人与自然和谐共生、走和平发展道路）与「五条重大原则」（党的全面领导、中特道路、以人民为中心、深化改革开放、发扬斗争精神）。</p>
+      </article>
+
+      <article class="item">
+        <h4>【教材补充】社会主义基本经济制度与新发展格局</h4>
+        <div class="ans">
+          <strong>社会主义基本经济制度</strong>：<span class="key-red">公有制为主体、多种所有制经济共同发展，按劳分配为主体、多种分配方式并存，社会主义市场经济体制</span>。公有制经济和非公有制经济都是社会主义市场经济的重要组成部分，都是我国经济社会发展的重要基础（坚持「两个毫不动摇」：毫不动摇巩固和发展公有制经济，毫不动摇鼓励、支持、引导非公有制经济发展）。<br>
+          <strong>新发展格局</strong>：加快构建<span class="key-red">以国内大循环为主体、国内国际双循环相互促进</span>的新发展格局，推动<strong>高质量发展</strong>是全面建设社会主义现代化国家的<span class="key-red">首要任务</span>。
+        </div>
+        <p class="tip"><strong>易错辨析：</strong>注意区分：非公有制经济是「<strong>社会主义市场经济</strong>的重要组成部分」，不能说是「社会主义经济的组成部分」（社会主义经济特指公有制经济）；市场在资源配置中起<strong>决定性作用</strong>（十八届三中全会前为「基础性作用」）。</p>
+      </article>
+    </div>
+  </section>
+
+  <div id="emptyNotice" class="empty-notice">未找到匹配的考点条目，请尝试缩短或更换检索词。</div>
+
+</main>
+
+<script>
+(function () {
+  var searchInput = document.getElementById('searchInput');
+  var quizToggleBtn = document.getElementById('quizToggleBtn');
+  var statusCount = document.getElementById('statusCount');
+  var emptyNotice = document.getElementById('emptyNotice');
+  var items = Array.prototype.slice.call(document.querySelectorAll('article.item'));
+  var tableRows = Array.prototype.slice.call(document.querySelectorAll('.comp-table tbody tr'));
+  var isQuizMode = false;
+
+  function updateStatus() {
+    var visibleCount = 0;
+    for (var i = 0; i < items.length; i++) {
+      if (!items[i].classList.contains('hidden-by-filter')) {
+        visibleCount++;
+      }
+    }
+    statusCount.textContent = '显示 ' + visibleCount + ' / ' + items.length + ' 条';
+    emptyNotice.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  function filterItems() {
+    var kw = searchInput.value.trim().toLowerCase();
+    for (var i = 0; i < items.length; i++) {
+      var el = items[i];
+      if (!kw) {
+        el.classList.remove('hidden-by-filter');
+      } else {
+        var text = el.textContent.toLowerCase();
+        if (text.indexOf(kw) !== -1) {
+          el.classList.remove('hidden-by-filter');
+        } else {
+          el.classList.add('hidden-by-filter');
+        }
+      }
+    }
+    updateStatus();
+  }
+
+  function setQuizMode(enable) {
+    isQuizMode = enable;
+    if (isQuizMode) {
+      document.body.classList.add('quiz-mode');
+      quizToggleBtn.classList.add('active');
+      quizToggleBtn.setAttribute('aria-pressed', 'true');
+      quizToggleBtn.textContent = '遮挡自测：开（点击条目显隐）';
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.remove('revealed');
+      }
+      for (var j = 0; j < tableRows.length; j++) {
+        tableRows[j].classList.remove('row-revealed');
+      }
+    } else {
+      document.body.classList.remove('quiz-mode');
+      quizToggleBtn.classList.remove('active');
+      quizToggleBtn.setAttribute('aria-pressed', 'false');
+      quizToggleBtn.textContent = '遮挡自测：关';
+      for (var k = 0; k < items.length; k++) {
+        items[k].classList.remove('revealed');
+      }
+      for (var m = 0; m < tableRows.length; m++) {
+        tableRows[m].classList.remove('row-revealed');
+      }
+    }
+  }
+
+  quizToggleBtn.addEventListener('click', function () {
+    setQuizMode(!isQuizMode);
+  });
+
+  searchInput.addEventListener('input', filterItems);
+
+  for (var i = 0; i < items.length; i++) {
+    (function (itemEl) {
+      itemEl.addEventListener('click', function () {
+        if (!isQuizMode) return;
+        itemEl.classList.toggle('revealed');
+      });
+    })(items[i]);
+  }
+
+  for (var j = 0; j < tableRows.length; j++) {
+    (function (rowEl) {
+      rowEl.addEventListener('click', function () {
+        if (!isQuizMode) return;
+        rowEl.classList.toggle('row-revealed');
+      });
+    })(tableRows[j]);
+  }
+
+  updateStatus();
+})();
+</script>
+<style id="quizfix-style">
+/* QUIZFIX: 遮挡自测 v2 —— 只遮答案段，题干/框架保持可见（覆盖各页旧的全遮规则）
+   兼容两种模式类名： quiz-mode / test-mode ；展开类名： revealed / expanded */
+body.quiz-mode .item .ans, body.quiz-mode .item .tip,
+body.quiz-mode .item:not(.revealed) .ans, body.quiz-mode .item:not(.revealed) .tip,
+body.quiz-mode .item .ans *, body.quiz-mode .item .tip *,
+body.test-mode .item .ans, body.test-mode .item .tip,
+body.test-mode .item:not(.revealed) .ans, body.test-mode .item:not(.revealed) .tip,
+body.test-mode .item:not(.expanded) .ans, body.test-mode .item:not(.expanded) .tip,
+body.test-mode .item .ans *, body.test-mode .item .tip * {
+  color: inherit !important;
+  background-color: transparent !important;
+  filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: none !important;
+}
+body.quiz-mode .item:not(.revealed) .msk,
+body.test-mode .item:not(.revealed):not(.expanded) .msk {
+  color: transparent !important;
+  background-color: #DCD4BF !important;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #C7BC9E;
+  filter: none !important;
+  user-select: none;
+}
+body.quiz-mode .item:not(.revealed) .msk *,
+body.test-mode .item:not(.revealed):not(.expanded) .msk * {
+  color: transparent !important;
+  background-color: transparent !important;
+}
+</style>
+<script>
+/* QUIZFIX-JS: 把答案段标成 .msk —— ①已有高亮标记（k/hl/num/key/err/mono/quiz-cell）
+   ②公式行按分隔符切分，遮 =、~、⇒、⇔ 之后的结果段 ③对比表遮首列以外的数据格 */
+(function () {
+  function ready(fn) { if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  ready(function () {
+    var HL = ['k', 'hl', 'num', 'key', 'err', 'mono', 'quiz-cell', 'formula', 'red', 'code', 'code-inline', 'highlight-red', 'key-red'];
+    document.querySelectorAll('.item').forEach(function (item) {
+      var sel = HL.map(function (c) { return '.ans .' + c + ', .tip .' + c; }).join(', ');
+      item.querySelectorAll(sel).forEach(function (sp) { sp.classList.add('msk'); });
+      var ans = item.querySelector('.ans');
+      if (ans) {
+        var walker = document.createTreeWalker(ans, NodeFilter.SHOW_TEXT, {
+          acceptNode: function (node) {
+            if (!node.nodeValue || !/[~=]|⇒|⇔/.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+            var p = node.parentElement;
+            if (!p || p.closest('.msk') || p.closest('sup') || p.closest('sub')) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function (node) {
+          var frag = document.createDocumentFragment();
+          node.nodeValue.split(/(；|;)/).forEach(function (seg, idx) {
+            if (idx % 2 === 1) { frag.appendChild(document.createTextNode(seg)); return; }
+            var m = seg.match(/^([\s\S]*?[~=⇒⇔]\s*)([\s\S]+)$/);
+            if (m && m[2].replace(/[\s。．.]+$/, '').length > 0) {
+              frag.appendChild(document.createTextNode(m[1]));
+              var s = document.createElement('span');
+              s.className = 'msk';
+              s.textContent = m[2];
+              frag.appendChild(s);
+            } else {
+              frag.appendChild(document.createTextNode(seg));
+            }
+          });
+          node.parentNode.replaceChild(frag, node);
+        });
+      }
+      item.querySelectorAll('table').forEach(function (tb) {
+        tb.querySelectorAll('tr').forEach(function (tr) {
+          tr.querySelectorAll('td').forEach(function (td, ci) {
+            if (ci === 0 || td.querySelector('.msk')) return;
+            var s = document.createElement('span');
+            s.className = 'msk';
+            while (td.firstChild) s.appendChild(td.firstChild);
+            td.appendChild(s);
+          });
+        });
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
